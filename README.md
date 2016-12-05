@@ -16,9 +16,11 @@ The server is a Python bottle application containing a REST interface.
 
 ### Installation & Setup
 
-The server requires Python 2 (implemented and tested with 2.7.10) and the package management system Pip. 
+The server requires Python 2 (implemented and tested with 2.7.10). 
 
-* Install requirements with `pip install -r requirements.txt`
+* Install pip (https://pip.pypa.io/en/stable/installing/)
+* Optional: install, set up and activate a virtual environment (http://docs.python-guide.org/en/latest/dev/virtualenvs/)
+* Install dependencies: `pip install -r requirements.txt`
 * Run the server with `python server.py`
 
 ### REST API documentation
