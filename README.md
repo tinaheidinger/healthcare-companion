@@ -20,9 +20,30 @@ The server requires Python 2 (implemented and tested with 2.7.10).
 
 * Install pip (https://pip.pypa.io/en/stable/installing/)
 * Optional: install, set up and activate a virtual environment (http://docs.python-guide.org/en/latest/dev/virtualenvs/)
-* Install dependencies: `pip install -r requirements.txt`
-* Run the server with `python server.py`
+* Install dependencies: `pip install -r server/requirements.txt`
+* Run the server with `python server/server.py`
 
 ### REST API documentation
 
-tbd
+#### POST /goal
+##### Request
+* Content-Type: application/json 
+```
+{
+	"companion": <Companion ID>,
+	"emoji": <String representation of Emoji>,
+	"text": <Goal text>
+}
+```
+
+##### Response
+* Content-Type: application/json 
+```
+{
+	"id": 11,
+	"companion": <Companion ID>,
+	"emoji": <String representation of Emoji>,
+	"text": <Goal text>
+	"active": true,
+}
+```

@@ -1,7 +1,8 @@
 import os
-from bottle import run, request, get, post
+from bottle import run, request, response, get, post
 import dataset
 import requests
+import json
 
 # database
 db = dataset.connect('sqlite:///' + os.path.dirname(os.path.abspath(__file__)) + '/database.db')
@@ -20,6 +21,7 @@ def expect_json(fn):
         return fn()
     return inner
 
+
 #############################################################################
 ###### REST API
 #############################################################################
@@ -27,10 +29,14 @@ def expect_json(fn):
 @expect_json
 @post('/goal')
 def post_goal():
-    companion = request.json['companion']
-    emoji = request.json['emoji']
-    text = request.json['text']
-    new_goal_id = table_goals.insert(dict(companion = companion, emoji = emoji, text = text, state = False))
-    print(new_goal_id)
+    goal = dict()
+    goal['companion'] = request.json['companion']
+    goal['emoji'] = request.json['emoji']
+    goal['text'] = request.json['text']
+    goal['active'] = True
+    goal['id'] = table_goals.insert(goal)
+    response.status = 200
+    response.content_type = 'application/json'
+    return json.dumps(goal)
 
 run(host='localhost', port=8080, debug=False, reloader = True)
