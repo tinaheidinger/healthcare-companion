@@ -24,7 +24,9 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:weightSum="1">
+            android:weightSum="1"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true">
 
             <ImageView
                 android:layout_width="match_parent"
@@ -33,11 +35,15 @@
                 android:id="@+id/avatar" />
 
             <ImageButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:srcCompat="@android:drawable/btn_star_big_off"
+                android:layout_width="126dp"
+                android:layout_height="112dp"
+                app:srcCompat="@android:drawable/btn_star_big_on"
                 android:id="@+id/goalButton"
-                android:layout_weight="0.28" />
+                android:elevation="0dp"
+                android:background="@android:color/transparent"
+                android:tint="@android:color/transparent"
+                android:adjustViewBounds="true"
+                android:layout_weight="0.05" />
         </LinearLayout>
     </RelativeLayout>
 
