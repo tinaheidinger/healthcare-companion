@@ -5,4 +5,5 @@
 
 
     <string name="activity_daily_goals1">Sport</string>
+    <string name="title_activity_http_handler">HttpHandlerActivity</string>
 </resources>
