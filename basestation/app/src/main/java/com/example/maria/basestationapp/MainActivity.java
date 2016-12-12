@@ -44,9 +44,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-            new HttpHandler().execute();
-
     }
 
 }
