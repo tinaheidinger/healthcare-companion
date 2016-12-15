@@ -16,24 +16,18 @@ import android.widget.ListView;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.HttpURLConnection;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -50,12 +44,19 @@ public class DailyGoals extends Activity {
     private static ConnectivityManager connMgr;
     private static NetworkInfo networkInfo;
 
+    /* method starts when activity is called
+    * views and data is requested and loaded to display
+     *  */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daily_goals);
 
+        new HttpAsyncTaskGET().execute("http://139.59.158.39:8080/goals");
+
+
         final ListView listview = (ListView) findViewById(R.id.goalslistView);
+
         String[] values = new String[] { "Obst essen", "Sport machen" };
 
         final ArrayList<String> list = new ArrayList<String>();
@@ -79,16 +80,14 @@ public class DailyGoals extends Activity {
         FloatingActionButton myFab = (FloatingActionButton) this.findViewById(R.id.addGoal);
         myFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                new HttpAsyncTask().execute("http://139.59.158.39:8080/goal");
                 Intent intent = new Intent(DailyGoals.this, EnteringDailyGoal.class);
                 startActivity(intent);
             }
         });
 
 
-
         /*
-        * Network setup
+        * Network check, for debug purpose
         * */
         if(isConnected()){
             Log.d(TAG,"connected: "+isConnected());
@@ -97,9 +96,10 @@ public class DailyGoals extends Activity {
         }
 
     }
-
+    /*
+    * entries of the List
+    * */
     private class StableArrayAdapter extends ArrayAdapter<String> {
-
         HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
 
         public StableArrayAdapter(Context context, int textViewResourceId,
@@ -123,7 +123,11 @@ public class DailyGoals extends Activity {
 
     }
 
-    private class HttpAsyncTask extends AsyncTask<String, Void, String> {
+    /**
+     * POST request to server calls post method
+     * (has to be an AsyncTask)
+     * */
+    private class HttpAsyncTaskPOST extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... urls) {
 
@@ -152,6 +156,12 @@ public class DailyGoals extends Activity {
         }
     }
 
+    /**
+     * Post method
+     * creates a JSON object with the entered daily goal data id, emoji, text
+     * and send it to the server
+     *
+     * */
     public static String POST(String url){
         Log.d(TAG,"Post Method started: connected"+networkInfo.toString());
 
@@ -175,7 +185,6 @@ public class DailyGoals extends Activity {
             StringEntity se = new StringEntity(json);
 
             httpPost.setEntity(se);
-            httpPost.setHeader("Accept", "application/json");
             httpPost.setHeader("Content-type", "application/json");
 
             Log.d(TAG,"preparing HttpPost with following content..");
@@ -217,6 +226,49 @@ public class DailyGoals extends Activity {
         return result;
 
     }
+    /**
+     * GET request to server calls get method
+     * (has to be an AsyncTask)
+     * */
+    private class HttpAsyncTaskGET extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... urls) {
+            Log.d(TAG,"doIn Background: connected"+isConnected());
+
+            return GET(urls[0]);
+        }
+       /* // onPostExecute displays the results of the AsyncTask.
+        @Override
+        protected void onPostExecute(String result) {
+            Toast.makeText(getBaseContext(), "Data Sent!", Toast.LENGTH_LONG).show();
+        }*/
+    }
+
+    /**
+     * requests all daily goals of the specific companion
+     * */
+    public static String GET(String url){
+        Log.d(TAG,"GET Method started: connected"+networkInfo.toString());
+
+        HttpClient httpclient = new DefaultHttpClient();
+        HttpGet httpget= new HttpGet(url+"?companion=1");
+        String result="";
+
+        try {
+        HttpResponse response = httpclient.execute(httpget);
+            String server_response = null;
+            server_response = EntityUtils.toString(response.getEntity());
+            result = server_response;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Log.d(TAG,"Server response..."+result );
+        return result;
+    }
+
+
 
 }
 

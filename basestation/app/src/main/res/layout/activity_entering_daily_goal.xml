@@ -17,6 +17,5 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:layout_marginStart="35dp"
-        android:layout_marginTop="62dp"
         android:id="@+id/enteringTextview" />
 </RelativeLayout>
