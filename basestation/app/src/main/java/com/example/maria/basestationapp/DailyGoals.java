@@ -21,6 +21,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,6 +29,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,28 +45,37 @@ public class DailyGoals extends Activity {
 
     private static ConnectivityManager connMgr;
     private static NetworkInfo networkInfo;
-
+    private static ArrayList<String> listGoals = new ArrayList<>();
     /* method starts when activity is called
     * views and data is requested and loaded to display
      *  */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //new DailyGoals.HttpAsyncTaskPOST().execute("http://139.59.158.39:8080/goal");
+        new DailyGoals.HttpAsyncTaskGET().execute("http://139.59.158.39:8080/goals");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daily_goals);
 
-        new HttpAsyncTaskGET().execute("http://139.59.158.39:8080/goals");
+        //new DailyGoals.HttpAsyncTaskPOST().execute("http://139.59.158.39:8080/goal");
 
+        refresh();
+        /*
+        * Network check, for debug purpose
+        * */
+        if(isConnected()){
+            Log.d(TAG,"connected: "+isConnected());
+        }else{
+            Log.d(TAG,"not connected");
+        }
+        refresh();
+    }
 
+    protected void refresh(){
+        Log.d(TAG, "refresh ... "+listGoals.toString());
         final ListView listview = (ListView) findViewById(R.id.goalslistView);
 
-        String[] values = new String[] { "Obst essen", "Sport machen" };
-
-        final ArrayList<String> list = new ArrayList<String>();
-        for (int i = 0; i < values.length; ++i) {
-            list.add(values[i]);
-        }
         final StableArrayAdapter adapter = new StableArrayAdapter(this,
-                android.R.layout.simple_list_item_1, list);
+                android.R.layout.simple_list_item_1, listGoals);
         listview.setAdapter(adapter);
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -84,17 +95,6 @@ public class DailyGoals extends Activity {
                 startActivity(intent);
             }
         });
-
-
-        /*
-        * Network check, for debug purpose
-        * */
-        if(isConnected()){
-            Log.d(TAG,"connected: "+isConnected());
-        }else{
-            Log.d(TAG,"not connected");
-        }
-
     }
     /*
     * entries of the List
@@ -177,8 +177,8 @@ public class DailyGoals extends Activity {
 
             JSONObject jsonObject = new JSONObject();
             jsonObject.accumulate("companion", 1);
-            jsonObject.accumulate("emoji", ":apple:");
-            jsonObject.accumulate("text", "test abc");
+            jsonObject.accumulate("emoji", "0x1F34E");
+            jsonObject.accumulate("text", "jeden Tag Obst essen");
 
             json = jsonObject.toString();
 
@@ -202,7 +202,7 @@ public class DailyGoals extends Activity {
             else {
                 result = "Did not work!";
             }
-            
+
         } catch (JSONException e) {
             Log.d(TAG,"JSON Exception");
         } catch (IOException e){
@@ -227,15 +227,17 @@ public class DailyGoals extends Activity {
 
     }
     /**
-     * GET request to server calls get method
+     * GET request to server, calls get method
      * (has to be an AsyncTask)
      * */
-    private class HttpAsyncTaskGET extends AsyncTask<String, Void, String> {
+    private class HttpAsyncTaskGET extends AsyncTask<String, Void, ArrayList<String>>{
         @Override
-        protected String doInBackground(String... urls) {
+        protected ArrayList<String> doInBackground(String... urls) {
             Log.d(TAG,"doIn Background: connected"+isConnected());
+            listGoals= GET(urls[0]);
 
-            return GET(urls[0]);
+            Log.d(TAG, listGoals.toString());
+            return listGoals;
         }
        /* // onPostExecute displays the results of the AsyncTask.
         @Override
@@ -247,24 +249,40 @@ public class DailyGoals extends Activity {
     /**
      * requests all daily goals of the specific companion
      * */
-    public static String GET(String url){
+    public static ArrayList<String> GET(String url){
         Log.d(TAG,"GET Method started: connected"+networkInfo.toString());
 
         HttpClient httpclient = new DefaultHttpClient();
         HttpGet httpget= new HttpGet(url+"?companion=1");
-        String result="";
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonObject=null;
+        ArrayList<String> result = new ArrayList<String>();
 
         try {
         HttpResponse response = httpclient.execute(httpget);
             String server_response = null;
             server_response = EntityUtils.toString(response.getEntity());
-            result = server_response;
+            jsonArray = new JSONArray(server_response);
+
+            if(jsonArray.length()>0){
+                String emoji="";
+                String text="";
+                for(int i=0; i<jsonArray.length(); i++){
+                    jsonObject = jsonArray.getJSONObject(i);
+                    emoji = jsonObject.getString("emoji");
+                    text = jsonObject.getString("text");
+                    result.add(emoji+" "+text);
+                }
+            }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG,"IOException "+e.getMessage());
+        } catch (JSONException e){
+            Log.e(TAG,"JSON Exception "+e.getMessage());
         }
 
-        Log.d(TAG,"Server response..."+result );
+
+        Log.d(TAG,"Server response..."+result);
         return result;
     }
 

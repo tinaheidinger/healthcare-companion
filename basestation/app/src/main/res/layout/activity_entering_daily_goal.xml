@@ -8,14 +8,39 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.maria.basestationapp.EnteringDailyGoal">
+    tools:context="com.example.maria.basestationapp.EnteringDailyGoal"
+    android:weightSum="1">
+
 
     <TextView
-        android:text="TextView"
+        android:text="Neues Ziel erstellen:"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_marginStart="170dp"
+        android:id="@+id/textView"
+        android:layout_alignBottom="@+id/editText3"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="35dp"
-        android:id="@+id/enteringTextview" />
+        android:layout_marginBottom="94dp"
+        android:textSize="24sp"
+        android:textColor="@android:color/background_dark" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Hier Text eingeben.."
+        android:ems="10"
+        android:layout_marginTop="191dp"
+        android:id="@+id/editText3"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/textView" />
+
+    <Button
+        android:text="speichern"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView"
+        android:layout_alignStart="@+id/editText3"
+        android:layout_marginTop="119dp"
+        android:id="@+id/button2" />
 </RelativeLayout>

@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), DailyGoals.class);
                 startActivityForResult(intent, 0);
-
             }
         });
     }
