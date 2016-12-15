@@ -31,7 +31,7 @@
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_daily_goals"
-        android:layout_height="675dp" />
+        android:layout_height="768dp" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/addGoal"
