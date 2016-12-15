@@ -25,6 +25,26 @@ The server requires Python 2 (implemented and tested with 2.7.10).
 
 ### REST API documentation
 
+#### GET /goals
+##### Request
+* Parameter: `companion` containing the companion ID
+
+##### Response
+* Content-Type: application/json 
+```
+[
+  {
+    "id": 1,
+    "active": true,
+    "text": "daily fruit",
+    "emoji": ":apple:",
+    "companion": "buddy"
+  }
+]
+```
+
+
+
 #### POST /goal
 ##### Request
 * Content-Type: application/json 
