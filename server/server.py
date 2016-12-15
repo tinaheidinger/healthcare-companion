@@ -39,4 +39,12 @@ def post_goal():
     response.content_type = 'application/json'
     return json.dumps(goal)
 
-run(host='localhost', port=8080, debug=False, reloader = True)
+@get('/goals')
+def get_goals():
+    companion = request.query.companion
+    goals = list(table_goals.find(companion=companion))
+    response_status = 200
+    response.content_type = 'application/json'
+    return json.dumps(goals)
+
+run(host='localhost', port=8080, debug=False, reloader=True)
