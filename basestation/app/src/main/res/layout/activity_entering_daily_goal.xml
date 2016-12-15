@@ -24,17 +24,6 @@
         android:textSize="24sp"
         android:textColor="@android:color/background_dark" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text="Hier Text eingeben.."
-        android:ems="10"
-        android:layout_marginTop="191dp"
-        android:id="@+id/editText3"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/textView" />
-
     <Button
         android:text="speichern"
         android:layout_width="wrap_content"
@@ -43,4 +32,27 @@
         android:layout_alignStart="@+id/editText3"
         android:layout_marginTop="119dp"
         android:id="@+id/button2" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="14dp"
+        android:id="@+id/editText4"
+        android:text="Emoji (optional)" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Hier eingeben.."
+        android:ems="10"
+        android:layout_marginTop="187dp"
+        android:id="@+id/editText3"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/textView" />
+
 </RelativeLayout>

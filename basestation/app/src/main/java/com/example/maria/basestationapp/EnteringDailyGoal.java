@@ -30,6 +30,7 @@ import java.io.InputStreamReader;
 public class EnteringDailyGoal extends AppCompatActivity {
     private static final String TAG = "EnteringDailyGoals";
     private static String name = "";
+    private static String emoji = "";
     private Button button;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,26 +39,26 @@ public class EnteringDailyGoal extends AppCompatActivity {
 
         TextView titel = (TextView)findViewById(R.id.textView);
         final EditText editText = (EditText) findViewById(R.id.editText3);
+        final EditText editEmoji = (EditText) findViewById(R.id.editText4);
 
         button = (Button) findViewById(R.id.button2);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 name = editText.getText().toString();
+                emoji = editEmoji.getText().toString();
                 Log.d(TAG,name);
 
                 new HttpAsyncTaskPOST().execute("http://139.59.158.39:8080/goal");
-
             }
 
         });
-        
+
         /*int unicode = 0x1F604;
         String emoji = new String(Character.toChars(unicode));
 
         titel.setText(emoji);*/
 
     }
-
 
     /**
      * POST request to server calls post method
@@ -96,8 +97,8 @@ public class EnteringDailyGoal extends AppCompatActivity {
             String json = "";
 
             JSONObject jsonObject = new JSONObject();
-            jsonObject.accumulate("companion", 1);
-            jsonObject.accumulate("emoji", "0x1F6B2");
+            jsonObject.accumulate("companion", 3);
+            jsonObject.accumulate("emoji", emoji);
             jsonObject.accumulate("text", name);
 
             json = jsonObject.toString();

@@ -53,12 +53,14 @@ public class DailyGoals extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         //new DailyGoals.HttpAsyncTaskPOST().execute("http://139.59.158.39:8080/goal");
         new DailyGoals.HttpAsyncTaskGET().execute("http://139.59.158.39:8080/goals");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daily_goals);
 
         //new DailyGoals.HttpAsyncTaskPOST().execute("http://139.59.158.39:8080/goal");
 
-        refresh();
+        // Simulating something timeconsuming
+
         /*
         * Network check, for debug purpose
         * */
@@ -67,11 +69,23 @@ public class DailyGoals extends Activity {
         }else{
             Log.d(TAG,"not connected");
         }
-        refresh();
+        try {
+            Thread.sleep(1000);
+            refresh();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        FloatingActionButton reload = (FloatingActionButton) this.findViewById(R.id.load);
+        reload.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                refresh();
+            }
+        });
     }
 
     protected void refresh(){
         Log.d(TAG, "refresh ... "+listGoals.toString());
+        new DailyGoals.HttpAsyncTaskGET().execute("http://139.59.158.39:8080/goals");
         final ListView listview = (ListView) findViewById(R.id.goalslistView);
 
         final StableArrayAdapter adapter = new StableArrayAdapter(this,
@@ -95,6 +109,7 @@ public class DailyGoals extends Activity {
                 startActivity(intent);
             }
         });
+
     }
     /*
     * entries of the List
@@ -253,7 +268,7 @@ public class DailyGoals extends Activity {
         Log.d(TAG,"GET Method started: connected"+networkInfo.toString());
 
         HttpClient httpclient = new DefaultHttpClient();
-        HttpGet httpget= new HttpGet(url+"?companion=1");
+        HttpGet httpget= new HttpGet(url+"?companion=3");
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObject=null;
         ArrayList<String> result = new ArrayList<String>();
