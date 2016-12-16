@@ -60,7 +60,7 @@ The server requires Python 2 (implemented and tested with 2.7.10).
 * Content-Type: application/json 
 ```
 {
-	"id": 11,
+	"id": <Companion ID>,
 	"companion": <Companion name>,
 	"emoji": <String representation of Emoji>,
 	"text": <Goal text>
@@ -69,7 +69,7 @@ The server requires Python 2 (implemented and tested with 2.7.10).
 ```
 
 
-#### PUT /goal/<id>
+#### PUT /goal/{id}
 ##### Request
 * Content-Type: application/json 
 ```
