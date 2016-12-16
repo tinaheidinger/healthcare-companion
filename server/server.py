@@ -1,5 +1,5 @@
 import os
-from bottle import run, request, response, get, post
+from bottle import run, request, response, get, post, put
 import dataset
 import requests
 import json
@@ -26,6 +26,7 @@ def expect_json(fn):
 ###### REST API
 #############################################################################
 
+# creates a new goal
 @expect_json
 @post('/goal')
 def post_goal():
@@ -39,6 +40,7 @@ def post_goal():
     response.content_type = 'application/json'
     return json.dumps(goal)
 
+# lists all goals for a specified companion
 @get('/goals')
 def get_goals():
     companion = request.query.companion
@@ -47,4 +49,16 @@ def get_goals():
     response.content_type = 'application/json'
     return json.dumps(goals)
 
-run(host='localhost', port=8080, debug=False, reloader=True)
+# changes the active status for a specified goal
+@expect_json
+@put('/goal/<id:int>')
+def set_active(id):
+    table_goals.update(dict(id=id, active=request.json['active']), ['id'])
+    goal = table_goals.find_one(id=id)
+    response_status = 200
+    response.content_type = 'application/json'
+    return json.dumps(goal)
+
+
+
+run(host='0.0.0.0', port=8080, debug=False, reloader=True)

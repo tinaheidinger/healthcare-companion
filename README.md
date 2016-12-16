@@ -50,7 +50,7 @@ The server requires Python 2 (implemented and tested with 2.7.10).
 * Content-Type: application/json 
 ```
 {
-	"companion": <Companion ID>,
+	"companion": <Companion name>,
 	"emoji": <String representation of Emoji>,
 	"text": <Goal text>
 }
@@ -61,9 +61,31 @@ The server requires Python 2 (implemented and tested with 2.7.10).
 ```
 {
 	"id": 11,
-	"companion": <Companion ID>,
+	"companion": <Companion name>,
 	"emoji": <String representation of Emoji>,
 	"text": <Goal text>
 	"active": true,
+}
+```
+
+
+#### PUT /goal/<id>
+##### Request
+* Content-Type: application/json 
+```
+{
+	"active": <boolean>
+}
+```
+
+##### Response
+* Content-Type: application/json 
+```
+{
+	"id": <Companion ID>,
+	"companion": <Companion name>,
+	"emoji": <String representation of Emoji>,
+	"text": <Goal text>
+	"active": <boolean>,
 }
 ```
