@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">BaseStationApp</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_daily_goals">DailyGoals</string>
+
+
+    <string name="activity_daily_goals1">Sport</string>
+    <string name="title_activity_http_handler">HttpHandlerActivity</string>
+</resources>
