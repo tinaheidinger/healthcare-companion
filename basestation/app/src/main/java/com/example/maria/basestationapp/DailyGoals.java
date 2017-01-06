@@ -9,10 +9,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -45,7 +48,7 @@ public class DailyGoals extends Activity {
 
     private static ConnectivityManager connMgr;
     private static NetworkInfo networkInfo;
-    private static ArrayList<String> listGoals = new ArrayList<>();
+    private static ArrayList<Goal> listGoals = new ArrayList<Goal>();
     /* method starts when activity is called
     * views and data is requested and loaded to display
      *  */
@@ -86,8 +89,7 @@ public class DailyGoals extends Activity {
         new DailyGoals.HttpAsyncTaskGET().execute("http://139.59.158.39:8080/goals");
         final ListView listview = (ListView) findViewById(R.id.goalslistView);
 
-        final StableArrayAdapter adapter = new StableArrayAdapter(this,
-                android.R.layout.simple_list_item_1, listGoals);
+        final StableArrayAdapter adapter = new StableArrayAdapter(this, listGoals);
         listview.setAdapter(adapter);
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -112,22 +114,30 @@ public class DailyGoals extends Activity {
     /*
     * entries of the List
     * */
-    private class StableArrayAdapter extends ArrayAdapter<String> {
-        HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
+    private class StableArrayAdapter extends ArrayAdapter<Goal> {
 
-        public StableArrayAdapter(Context context, int textViewResourceId,
-                                  List<String> objects) {
-            super(context, textViewResourceId, objects);
-            for (int i = 0; i < objects.size(); ++i) {
-                mIdMap.put(objects.get(i), i);
-            }
+        public StableArrayAdapter(Context context, ArrayList<Goal> goals) {
+            super(context, 0, goals);
         }
 
         @Override
-        public long getItemId(int position) {
-            String item = getItem(position);
-            return mIdMap.get(item);
+        public View getView(int position, View convertView, ViewGroup parent) {
+            // Get the data item for this position
+            Goal goal = getItem(position);
+            // Check if an existing view is being reused, otherwise inflate the view
+            if (convertView == null) {
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.listview_layout, parent, false);
+            }
+            // Lookup view for data population
+            TextView emoji = (TextView) convertView.findViewById(R.id.emoji);
+            TextView text = (TextView) convertView.findViewById(R.id.name);
+            // Populate the data into the template view using the data object
+            emoji.setText(goal.emoji);
+            text.setText(goal.name);
+            // Return the completed view to render on screen
+            return convertView;
         }
+
 
         @Override
         public boolean hasStableIds() {
@@ -243,9 +253,9 @@ public class DailyGoals extends Activity {
      * GET request to server, calls get method
      * (has to be an AsyncTask)
      * */
-    private class HttpAsyncTaskGET extends AsyncTask<String, Void, ArrayList<String>>{
+    private class HttpAsyncTaskGET extends AsyncTask<String, Void, ArrayList<Goal>>{
         @Override
-        protected ArrayList<String> doInBackground(String... urls) {
+        protected ArrayList<Goal> doInBackground(String... urls) {
             Log.d(TAG,"doIn Background: connected"+isConnected());
             listGoals= GET(urls[0]);
 
@@ -262,14 +272,14 @@ public class DailyGoals extends Activity {
     /**
      * requests all daily goals of the specific companion
      * */
-    public static ArrayList<String> GET(String url){
+    public static ArrayList<Goal> GET(String url){
         Log.d(TAG,"GET Method started: connected"+networkInfo.toString());
 
         HttpClient httpclient = new DefaultHttpClient();
         HttpGet httpget= new HttpGet(url+"?companion=3");
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObject=null;
-        ArrayList<String> result = new ArrayList<String>();
+        ArrayList<Goal> result = new ArrayList<Goal>();
 
         try {
         HttpResponse response = httpclient.execute(httpget);
@@ -281,12 +291,15 @@ public class DailyGoals extends Activity {
                 String emoji="";
                 String emojimap="";
                 String text="";
+                Goal goal;
                 for(int i=0; i<jsonArray.length(); i++){
                     jsonObject = jsonArray.getJSONObject(i);
                     emoji = jsonObject.getString("emoji");
                     text = jsonObject.getString("text");
-                    emojimap=EmojiMap.replaceCheatSheetEmojis(emoji);
-                    result.add(emojimap+" "+text);
+                    emojimap=EmojiMap.replaceCheatSheetEmojis(":bike:");
+                    goal = new Goal(emojimap,text,"Di");
+                    Log.d(TAG, goal.toString());
+                    result.add(goal);
                 }
             }
 
