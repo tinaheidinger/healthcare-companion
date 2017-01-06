@@ -59,8 +59,6 @@ public class DailyGoals extends Activity {
 
         //new DailyGoals.HttpAsyncTaskPOST().execute("http://139.59.158.39:8080/goal");
 
-        // Simulating something timeconsuming
-
         /*
         * Network check, for debug purpose
         * */
@@ -281,12 +279,14 @@ public class DailyGoals extends Activity {
 
             if(jsonArray.length()>0){
                 String emoji="";
+                String emojimap="";
                 String text="";
                 for(int i=0; i<jsonArray.length(); i++){
                     jsonObject = jsonArray.getJSONObject(i);
                     emoji = jsonObject.getString("emoji");
                     text = jsonObject.getString("text");
-                    result.add(emoji+" "+text);
+                    emojimap=EmojiMap.replaceCheatSheetEmojis(emoji);
+                    result.add(emojimap+" "+text);
                 }
             }
 
