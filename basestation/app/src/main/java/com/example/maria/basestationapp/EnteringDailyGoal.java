@@ -3,12 +3,14 @@ package com.example.maria.basestationapp;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.view.View.OnClickListener;
@@ -26,6 +28,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 public class EnteringDailyGoal extends AppCompatActivity {
     private static final String TAG = "EnteringDailyGoals";
@@ -39,6 +45,8 @@ public class EnteringDailyGoal extends AppCompatActivity {
     private Button save;
     private Button back;
     private boolean backcheck=false;
+
+    private CalendarView calender;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,9 +75,10 @@ public class EnteringDailyGoal extends AppCompatActivity {
 
     }
 
-    private void loadCalender(){
+    protected void loadCalender(){
         setContentView(R.layout.activity_entering_daily_goal_datepicker);
         //new HttpAsyncTaskPOST().execute("http://139.59.158.39:8080/goal");
+
         back =(Button) findViewById(R.id.backButton);
         back.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {;
@@ -94,6 +103,42 @@ public class EnteringDailyGoal extends AppCompatActivity {
                 editEmoji.setText(EmojiMap.replaceCheatSheetEmojis(emoji));
             }
         });
+        calender = (CalendarView) findViewById(R.id.calendarView);
+
+        calender.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            Date temp;
+            ArrayList<Date> dates = new ArrayList<Date>();
+            @Override
+            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+                // display the selected date by using a toast
+                temp = parseDate(year, month, dayOfMonth);
+                if(!dates.contains(temp)){
+                    dates.add(temp);
+
+                }
+                else{
+                    dates.remove(temp);
+                }
+            }
+        });
+
+    }
+
+    private Date parseDate(int year, int month, int dayOfMonth){
+        SimpleDateFormat formatter = new SimpleDateFormat("d-MM-yyyy");
+        String datetoString = Integer.toString(dayOfMonth)+"-0"+Integer.toString(month+1)+"-"+Integer.toString(year);
+        Date date=new Date();
+        try {
+
+            date = formatter.parse(datetoString);
+            System.out.println(date);
+            System.out.println(formatter.format(date));
+
+        } catch (ParseException e) {
+            Log.e(TAG, e.toString());
+        }
+
+        return date;
     }
 
     /**

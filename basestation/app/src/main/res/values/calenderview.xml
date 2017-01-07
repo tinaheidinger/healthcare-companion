@@ -3,7 +3,9 @@
 
     <style xmlns:android="http://schemas.android.com/apk/res/android"
         name="calenderview" parent="android:Theme">
-        <item name="android:weekDayTextAppearance">@android:style/TextAppearance.Large</item>
+        <item name="android:weekDayTextAppearance">@android:style/TextAppearance.Medium</item>
         <item name="android:dateTextAppearance">@android:style/TextAppearance.Large</item>
+        <item name="android:textColor">@color/calendar</item>
+
     </style>
 </resources>
