@@ -31,24 +31,31 @@ public class EnteringDailyGoal extends AppCompatActivity {
     private static final String TAG = "EnteringDailyGoals";
     private static String name = "";
     private static String emoji = "";
+
+    private EditText editText;
+    private EditText editEmoji;
+
     private Button button;
+    private Button save;
+    private Button back;
+    private boolean backcheck=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_entering_daily_goal);
 
         TextView titel = (TextView)findViewById(R.id.textView);
-        final EditText editText = (EditText) findViewById(R.id.titleGoal);
-        final EditText editEmoji = (EditText) findViewById(R.id.emojiGoal);
+        editText = (EditText) findViewById(R.id.titleGoal);
+        editEmoji = (EditText) findViewById(R.id.emojiGoal);
 
         button = (Button) findViewById(R.id.furtherButton);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 name = editText.getText().toString();
                 emoji = EmojiMap.replaceUnicodeEmojis(editEmoji.getText().toString());
+                backcheck=true;
+                loadCalender();
                 Log.d(TAG,name);
-                setContentView(R.layout.activity_entering_daily_goal_datepicker);
-                //new HttpAsyncTaskPOST().execute("http://139.59.158.39:8080/goal");
             }
 
         });
@@ -58,6 +65,35 @@ public class EnteringDailyGoal extends AppCompatActivity {
 
         titel.setText(emoji);*/
 
+    }
+
+    private void loadCalender(){
+        setContentView(R.layout.activity_entering_daily_goal_datepicker);
+        //new HttpAsyncTaskPOST().execute("http://139.59.158.39:8080/goal");
+        back =(Button) findViewById(R.id.backButton);
+        back.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {;
+                setContentView(R.layout.activity_entering_daily_goal);
+
+                TextView titel = (TextView)findViewById(R.id.textView);
+                editText = (EditText) findViewById(R.id.titleGoal);
+                editEmoji = (EditText) findViewById(R.id.emojiGoal);
+
+                button = (Button) findViewById(R.id.furtherButton);
+                button.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        name = editText.getText().toString();
+                        emoji = EmojiMap.replaceUnicodeEmojis(editEmoji.getText().toString());
+                        backcheck=true;
+                        loadCalender();
+                        Log.d(TAG,name);
+                    }
+
+                });
+                editText.setText(name);
+                editEmoji.setText(EmojiMap.replaceCheatSheetEmojis(emoji));
+            }
+        });
     }
 
     /**

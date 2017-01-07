@@ -17,7 +17,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:background="#ffeeaa">
 
         <TextView
             android:text="Tagesziel bearbeiten"
@@ -30,7 +31,8 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="72dp">
+            android:layout_height="72dp"
+            android:layout_marginTop="50dp">
 
             <EditText
                 android:layout_width="wrap_content"
@@ -42,6 +44,7 @@
                 android:id="@+id/emojiGoal"
                 android:hint="Emoji aussuchen"
                 android:textSize="30sp"
+                android:layout_marginRight="50dp"
                 android:background="@drawable/edittextstyle"/>
 
             <EditText
@@ -55,7 +58,7 @@
                 android:hint="Titel des Tagesziels"
                 android:background="@drawable/edittextstyle"
                 android:singleLine="true"
-                android:textSize="24sp" />
+                android:textSize="30sp" />
 
         </LinearLayout>
 

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style xmlns:android="http://schemas.android.com/apk/res/android"
+        name="calenderview" parent="android:Theme">
+        <item name="android:weekDayTextAppearance">@android:style/TextAppearance.Large</item>
+        <item name="android:dateTextAppearance">@android:style/TextAppearance.Large</item>
+    </style>
+</resources>
