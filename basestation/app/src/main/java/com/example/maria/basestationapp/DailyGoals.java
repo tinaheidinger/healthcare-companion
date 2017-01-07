@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -37,10 +38,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 /*
-* draft of daily goals, setting up connection by entering view
+* Tagesziele werden angezeigt
+* bei laden der View vom Server abgefragt
 *
-* goals can be added via plus button
-* post request is executed
+* Ziele ueber plus-button hizugefuegt werden
 * */
 
 public class DailyGoals extends Activity {
@@ -105,6 +106,8 @@ public class DailyGoals extends Activity {
         FloatingActionButton myFab = (FloatingActionButton) this.findViewById(R.id.addGoal);
         myFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(0, 0);
                 Intent intent = new Intent(DailyGoals.this, EnteringDailyGoal.class);
                 startActivity(intent);
             }

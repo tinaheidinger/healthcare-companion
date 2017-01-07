@@ -11,8 +11,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar"
-        android:windowSoftInputMode="adjustResize">
+        android:theme="@style/AppTheme.NoActionBar">
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,7 +23,9 @@
             android:name=".DailyGoals"
             android:label="@string/title_activity_daily_goals"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".EnteringDailyGoal"></activity>
+        <activity android:name=".EnteringDailyGoal"
+            android:windowSoftInputMode="stateHidden"></activity>
+
     </application>
 
 </manifest>

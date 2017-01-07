@@ -1,6 +1,7 @@
 package com.example.maria.basestationapp;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.nfc.Tag;
@@ -8,12 +9,17 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
-import android.view.View.OnClickListener;
 import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
@@ -33,6 +39,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import static com.example.maria.basestationapp.R.color.calendar;
+
+/**
+ * Klasse um ein neues Tagesziel anzulegen und zu speichern
+ * */
 public class EnteringDailyGoal extends AppCompatActivity {
     private static final String TAG = "EnteringDailyGoals";
     private static String name = "";
@@ -47,6 +58,13 @@ public class EnteringDailyGoal extends AppCompatActivity {
     private boolean backcheck=false;
 
     private CalendarView calender;
+    private ArrayList<Date> dates;
+    private ListView listviewDates;
+    private StableArrayAdapter adapter;
+
+    /**
+     * wird beim ersten Starten aufgerufen und initialisiert die Elemente der View
+     * */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +85,8 @@ public class EnteringDailyGoal extends AppCompatActivity {
             }
 
         });
+        dates = new ArrayList<Date>();
+        adapter = new StableArrayAdapter(this,dates);
 
         /*int unicode = 0x1F604;
         String emoji = new String(Character.toChars(unicode));
@@ -75,10 +95,14 @@ public class EnteringDailyGoal extends AppCompatActivity {
 
     }
 
+    /**
+     * laedt die Ansicht, in der der Kalender dargestellt wird
+     * so koennen Termine ausgewaehlt werden, wann Tagesziel erreicht werden soll
+     * */
     protected void loadCalender(){
         setContentView(R.layout.activity_entering_daily_goal_datepicker);
         //new HttpAsyncTaskPOST().execute("http://139.59.158.39:8080/goal");
-
+        listviewDates = (ListView) findViewById(R.id.listDates);
         back =(Button) findViewById(R.id.backButton);
         back.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {;
@@ -103,18 +127,17 @@ public class EnteringDailyGoal extends AppCompatActivity {
                 editEmoji.setText(EmojiMap.replaceCheatSheetEmojis(emoji));
             }
         });
-        calender = (CalendarView) findViewById(R.id.calendarView);
 
+        calender = (CalendarView) findViewById(R.id.calendarView);
         calender.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             Date temp;
-            ArrayList<Date> dates = new ArrayList<Date>();
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
                 // display the selected date by using a toast
                 temp = parseDate(year, month, dayOfMonth);
                 if(!dates.contains(temp)){
                     dates.add(temp);
-
+                    updateListView();
                 }
                 else{
                     dates.remove(temp);
@@ -124,6 +147,36 @@ public class EnteringDailyGoal extends AppCompatActivity {
 
     }
 
+    /**
+     * um ListView mit Daten zu aktualisieren
+     * */
+    private void updateListView(){
+        listviewDates.setAdapter(adapter);
+        listviewDates.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, final View view,
+                                    int position, long id) {
+                final Date item = (Date) parent.getItemAtPosition(position);
+                /*ArrayList<Date> newList=new ArrayList<Date>();
+
+                for(int i=0; i<dates.size(); i++){
+                    Log.d(TAG, "pruefe"+parseDate(item)+" und "+parseDate(dates.get(i)));
+                    if(parseDate(dates.get(i)).equals(parseDate(item))){
+                        Log.d(TAG, parseDate(item)+" und "+parseDate(dates.get(i))+" gleich");
+                    }else{
+                        newList.add(dates.get(i));
+                    }
+                }
+                dates=newList;
+                //updateListView();*/
+            }
+
+        });
+    }
+
+    /**
+     * Hilfsmethode um Date zu String umzuwandeln
+     * */
     private Date parseDate(int year, int month, int dayOfMonth){
         SimpleDateFormat formatter = new SimpleDateFormat("d-MM-yyyy");
         String datetoString = Integer.toString(dayOfMonth)+"-0"+Integer.toString(month+1)+"-"+Integer.toString(year);
@@ -139,6 +192,15 @@ public class EnteringDailyGoal extends AppCompatActivity {
         }
 
         return date;
+    }
+
+    /*
+    *Hilfsmethode um Date zu String umzuwandeln
+    * */
+    private String parseDate(Date date){
+        SimpleDateFormat formatter = new SimpleDateFormat("d-MM-yyyy");
+        String datetoString = formatter.format(date);
+        return datetoString;
     }
 
     /**
@@ -214,6 +276,37 @@ public class EnteringDailyGoal extends AppCompatActivity {
         return result;
     }
 
+    private class StableArrayAdapter extends ArrayAdapter<Date> {
+
+        public StableArrayAdapter(Context context, ArrayList<Date> goals) {
+            super(context, 0, goals);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            // Get the data item for this position
+            Date date = getItem(position);
+            // Check if an existing view is being reused, otherwise inflate the view
+            if (convertView == null) {
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.listview_calendar_layout, parent, false);
+            }
+            // Lookup view for data population
+            TextView pickedDates = (TextView) convertView.findViewById(R.id.pickedDates);
+            pickedDates.setText(parseDate(date));
+            return convertView;
+        }
+
+
+        @Override
+        public boolean hasStableIds() {
+            return true;
+        }
+
+    }
+
+    /**
+     * Hilfsmethode um erhaltenen Stream lesbar zu machen
+     * */
     private static String convertInputStreamToString(InputStream inputStream) throws IOException{
         Log.d(TAG,"prepare bufferedreader");
         BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(inputStream));
@@ -228,4 +321,12 @@ public class EnteringDailyGoal extends AppCompatActivity {
         return result;
 
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+    }
+
+
 }
