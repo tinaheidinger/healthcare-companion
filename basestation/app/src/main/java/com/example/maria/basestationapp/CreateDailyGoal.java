@@ -1,10 +1,7 @@
 package com.example.maria.basestationapp;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -39,12 +36,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import static com.example.maria.basestationapp.R.color.calendar;
-
 /**
  * Klasse um ein neues Tagesziel anzulegen und zu speichern
  * */
-public class EnteringDailyGoal extends AppCompatActivity {
+public class CreateDailyGoal extends AppCompatActivity {
     private static final String TAG = "EnteringDailyGoals";
     private static String name = "";
     private static String emoji = "";
@@ -52,9 +47,10 @@ public class EnteringDailyGoal extends AppCompatActivity {
     private EditText editText;
     private EditText editEmoji;
 
-    private Button button;
+    private Button furtherButton;
     private Button save;
-    private Button back;
+    private Button backButton;
+    private Button enterBackButton;
     private boolean backcheck=false;
 
     private CalendarView calender;
@@ -74,20 +70,39 @@ public class EnteringDailyGoal extends AppCompatActivity {
         editText = (EditText) findViewById(R.id.titleGoal);
         editEmoji = (EditText) findViewById(R.id.emojiGoal);
 
-        button = (Button) findViewById(R.id.furtherButton);
-        button.setOnClickListener(new View.OnClickListener() {
+        furtherButton = (Button) findViewById(R.id.furtherButton);
+        furtherButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 name = editText.getText().toString();
                 emoji = EmojiMap.replaceUnicodeEmojis(editEmoji.getText().toString());
+
+                InputMethodManager inputManager =
+                        (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.hideSoftInputFromWindow(furtherButton.getWindowToken(),0);
                 backcheck=true;
                 loadCalender();
                 Log.d(TAG,name);
             }
 
         });
+        backButton = (Button) findViewById(R.id.backButtonGoal);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                onBackPressed();
+            }
+
+        });
         dates = new ArrayList<Date>();
         adapter = new StableArrayAdapter(this,dates);
 
+        Intent intent = getIntent();
+        if (null != intent) {
+            String data[]= intent.getStringArrayExtra("goal");
+            if(data!=null) {
+                editText.setText(data[0]);
+                editText.setText(data[1]);
+            }
+        }
         /*int unicode = 0x1F604;
         String emoji = new String(Character.toChars(unicode));
 
@@ -103,17 +118,17 @@ public class EnteringDailyGoal extends AppCompatActivity {
         setContentView(R.layout.activity_entering_daily_goal_datepicker);
         //new HttpAsyncTaskPOST().execute("http://139.59.158.39:8080/goal");
         listviewDates = (ListView) findViewById(R.id.listDates);
-        back =(Button) findViewById(R.id.backButton);
-        back.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {;
+        backButton =(Button) findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
                 setContentView(R.layout.activity_entering_daily_goal);
 
                 TextView titel = (TextView)findViewById(R.id.textView);
                 editText = (EditText) findViewById(R.id.titleGoal);
                 editEmoji = (EditText) findViewById(R.id.emojiGoal);
 
-                button = (Button) findViewById(R.id.furtherButton);
-                button.setOnClickListener(new View.OnClickListener() {
+                furtherButton = (Button) findViewById(R.id.furtherButton);
+                furtherButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         name = editText.getText().toString();
                         emoji = EmojiMap.replaceUnicodeEmojis(editEmoji.getText().toString());
@@ -123,6 +138,13 @@ public class EnteringDailyGoal extends AppCompatActivity {
                     }
 
                 });
+                enterBackButton =(Button) findViewById(R.id.backButtonGoal);
+                enterBackButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        onBackPressed();
+                    }
+                });
+
                 editText.setText(name);
                 editEmoji.setText(EmojiMap.replaceCheatSheetEmojis(emoji));
             }
@@ -144,6 +166,14 @@ public class EnteringDailyGoal extends AppCompatActivity {
                 }
             }
         });
+        Intent intent = getIntent();
+        if (null != intent) {
+            String data[]= intent.getStringArrayExtra("goal");
+            if(data!=null) {
+                editText.setText(data[2]);
+                updateListView();
+            }
+        }
 
     }
 

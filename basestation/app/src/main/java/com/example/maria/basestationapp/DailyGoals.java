@@ -33,10 +33,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 /*
 * Tagesziele werden angezeigt
 * bei laden der View vom Server abgefragt
@@ -50,6 +47,7 @@ public class DailyGoals extends Activity {
     private static ConnectivityManager connMgr;
     private static NetworkInfo networkInfo;
     private static ArrayList<Goal> listGoals = new ArrayList<Goal>();
+
     /* method starts when activity is called
     * views and data is requested and loaded to display
      *  */
@@ -66,10 +64,10 @@ public class DailyGoals extends Activity {
         /*
         * Network check, for debug purpose
         * */
-        if(isConnected()){
-            Log.d(TAG,"connected: "+isConnected());
-        }else{
-            Log.d(TAG,"not connected");
+        if (isConnected()) {
+            Log.d(TAG, "connected: " + isConnected());
+        } else {
+            Log.d(TAG, "not connected");
         }
         try {
             Thread.sleep(1000);
@@ -85,8 +83,8 @@ public class DailyGoals extends Activity {
         });
     }
 
-    protected void refresh(){
-        Log.d(TAG, "refresh ... "+listGoals.toString());
+    protected void refresh() {
+        Log.d(TAG, "refresh ... " + listGoals.toString());
         new DailyGoals.HttpAsyncTaskGET().execute("http://139.59.158.39:8080/goals");
         final ListView listview = (ListView) findViewById(R.id.goalslistView);
 
@@ -94,11 +92,16 @@ public class DailyGoals extends Activity {
         listview.setAdapter(adapter);
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
             @Override
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
-                final String item = (String) parent.getItemAtPosition(position);
+                final Goal goal = (Goal) parent.getItemAtPosition(position);
+                String temp[] = new String[]{goal.emoji, goal.name, goal.emoji};
+                Intent intent = new Intent(DailyGoals.this, CreateDailyGoal.class);
+                intent.putExtra("goal", temp);
+
+                startActivity(intent);
+
             }
 
         });
@@ -108,12 +111,13 @@ public class DailyGoals extends Activity {
             public void onClick(View v) {
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(0, 0);
-                Intent intent = new Intent(DailyGoals.this, EnteringDailyGoal.class);
+                Intent intent = new Intent(DailyGoals.this, CreateDailyGoal.class);
                 startActivity(intent);
             }
         });
 
     }
+
     /*
     * entries of the List
     * */
@@ -152,12 +156,12 @@ public class DailyGoals extends Activity {
     /**
      * POST request to server calls post method
      * (has to be an AsyncTask)
-     * */
+     */
     private class HttpAsyncTaskPOST extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... urls) {
 
-            Log.d(TAG,"doIn Background: connected"+isConnected());
+            Log.d(TAG, "doIn Background: connected" + isConnected());
 
             return POST(urls[0]);
         }
@@ -168,16 +172,15 @@ public class DailyGoals extends Activity {
         }*/
     }
 
-    public boolean isConnected(){
+    public boolean isConnected() {
         connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
         networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
-            Log.d(TAG, "networktype: "+networkInfo.getTypeName()+" networkInfo: "+networkInfo.getExtraInfo());
-            Log.d(TAG, "state: "+networkInfo.getState());
+            Log.d(TAG, "networktype: " + networkInfo.getTypeName() + " networkInfo: " + networkInfo.getExtraInfo());
+            Log.d(TAG, "state: " + networkInfo.getState());
 
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -186,10 +189,9 @@ public class DailyGoals extends Activity {
      * Post method
      * creates a JSON object with the entered daily goal data id, emoji, text
      * and send it to the server
-     *
-     * */
-    public static String POST(String url){
-        Log.d(TAG,"Post Method started: connected"+networkInfo.toString());
+     */
+    public static String POST(String url) {
+        Log.d(TAG, "Post Method started: connected" + networkInfo.toString());
 
         InputStream inputStream = null;
         String result = "";
@@ -213,54 +215,54 @@ public class DailyGoals extends Activity {
             httpPost.setEntity(se);
             httpPost.setHeader("Content-type", "application/json");
 
-            Log.d(TAG,"preparing HttpPost with following content..");
-            Log.d(TAG,json.toString());
+            Log.d(TAG, "preparing HttpPost with following content..");
+            Log.d(TAG, json.toString());
 
             HttpResponse httpResponse = httpclient.execute(httpPost);
-            Log.d(TAG,"HttpPost ok");
+            Log.d(TAG, "HttpPost ok");
 
             inputStream = httpResponse.getEntity().getContent();
 
-            if(inputStream != null) {
+            if (inputStream != null) {
                 result = convertInputStreamToString(inputStream);
-                Log.d(TAG, "answer of server... \n"+result);
-            }
-            else {
+                Log.d(TAG, "answer of server... \n" + result);
+            } else {
                 result = "Did not work!";
             }
 
         } catch (JSONException e) {
-            Log.d(TAG,"JSON Exception");
-        } catch (IOException e){
+            Log.d(TAG, "JSON Exception");
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
         return result;
     }
 
-    private static String convertInputStreamToString(InputStream inputStream) throws IOException{
-        Log.d(TAG,"prepare bufferedreader");
-        BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(inputStream));
-        Log.d(TAG,"BR ok");
+    private static String convertInputStreamToString(InputStream inputStream) throws IOException {
+        Log.d(TAG, "prepare bufferedreader");
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        Log.d(TAG, "BR ok");
 
         String line = "";
         String result = "";
-        while((line = bufferedReader.readLine()) != null)
+        while ((line = bufferedReader.readLine()) != null)
             result += line;
 
         inputStream.close();
         return result;
 
     }
+
     /**
      * GET request to server, calls get method
      * (has to be an AsyncTask)
-     * */
-    private class HttpAsyncTaskGET extends AsyncTask<String, Void, ArrayList<Goal>>{
+     */
+    private class HttpAsyncTaskGET extends AsyncTask<String, Void, ArrayList<Goal>> {
         @Override
         protected ArrayList<Goal> doInBackground(String... urls) {
-            Log.d(TAG,"doIn Background: connected"+isConnected());
-            listGoals= GET(urls[0]);
+            Log.d(TAG, "doIn Background: connected" + isConnected());
+            listGoals = GET(urls[0]);
 
             Log.d(TAG, listGoals.toString());
             return listGoals;
@@ -274,49 +276,48 @@ public class DailyGoals extends Activity {
 
     /**
      * requests all daily goals of the specific companion
-     * */
-    public static ArrayList<Goal> GET(String url){
-        Log.d(TAG,"GET Method started: connected"+networkInfo.toString());
+     */
+    public static ArrayList<Goal> GET(String url) {
+        Log.d(TAG, "GET Method started: connected" + networkInfo.toString());
 
         HttpClient httpclient = new DefaultHttpClient();
-        HttpGet httpget= new HttpGet(url+"?companion=3");
+        HttpGet httpget = new HttpGet(url + "?companion=3");
         JSONArray jsonArray = new JSONArray();
-        JSONObject jsonObject=null;
+        JSONObject jsonObject = null;
         ArrayList<Goal> result = new ArrayList<Goal>();
 
         try {
-        HttpResponse response = httpclient.execute(httpget);
+            HttpResponse response = httpclient.execute(httpget);
             String server_response = null;
             server_response = EntityUtils.toString(response.getEntity());
             jsonArray = new JSONArray(server_response);
 
-            if(jsonArray.length()>0){
-                String emoji="";
-                String emojimap="";
-                String text="";
+            if (jsonArray.length() > 0) {
+                String emoji = "";
+                String emojimap = "";
+                String text = "";
                 Goal goal;
-                for(int i=0; i<jsonArray.length(); i++){
+                for (int i = 0; i < jsonArray.length(); i++) {
                     jsonObject = jsonArray.getJSONObject(i);
                     emoji = jsonObject.getString("emoji");
                     text = jsonObject.getString("text");
-                    emojimap=EmojiMap.replaceCheatSheetEmojis(":bike:");
-                    goal = new Goal(emojimap,text,"Di");
+                    emojimap = EmojiMap.replaceCheatSheetEmojis(":bike:");
+                    goal = new Goal(emojimap, text, "Di");
                     Log.d(TAG, goal.toString());
                     result.add(goal);
                 }
             }
 
         } catch (IOException e) {
-            Log.e(TAG,"IOException "+e.getMessage());
-        } catch (JSONException e){
-            Log.e(TAG,"JSON Exception "+e.getMessage());
+            Log.e(TAG, "IOException " + e.getMessage());
+        } catch (JSONException e) {
+            Log.e(TAG, "JSON Exception " + e.getMessage());
         }
 
 
-        Log.d(TAG,"Server response..."+result);
+        Log.d(TAG, "Server response..." + result);
         return result;
     }
-
 
 
 }

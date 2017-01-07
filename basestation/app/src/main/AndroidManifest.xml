@@ -23,7 +23,7 @@
             android:name=".DailyGoals"
             android:label="@string/title_activity_daily_goals"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".EnteringDailyGoal"
+        <activity android:name=".CreateDailyGoal"
             android:windowSoftInputMode="stateHidden"></activity>
 
     </application>
