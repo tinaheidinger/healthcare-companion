@@ -16,19 +16,23 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <TextView
+                android:text="Tagesziele"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textViewGoals"
+                android:layout_marginBottom="30dp"
+                android:gravity="center"
+                android:textSize="30sp"/>
+
             <ListView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/goalslistView" />
+                android:id="@+id/goalslistView"
+                android:layout_marginBottom="120dp"/>
         </LinearLayout>
+
     </RelativeLayout>
-
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-    </android.support.design.widget.AppBarLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/addGoal"
@@ -39,6 +43,13 @@
         app:srcCompat="@android:drawable/ic_menu_add"
         app:backgroundTint="?attr/actionMenuTextColor"
         app:rippleColor="@android:color/background_light" />
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+    </android.support.design.widget.AppBarLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/load"
@@ -52,6 +63,6 @@
 
 
     <include layout="@layout/content_daily_goals"
-        android:layout_height="match_parent" />
+        android:layout_height="787dp" />
 
 </android.support.design.widget.CoordinatorLayout>

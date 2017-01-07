@@ -38,17 +38,17 @@ public class EnteringDailyGoal extends AppCompatActivity {
         setContentView(R.layout.activity_entering_daily_goal);
 
         TextView titel = (TextView)findViewById(R.id.textView);
-        final EditText editText = (EditText) findViewById(R.id.editText3);
-        final EditText editEmoji = (EditText) findViewById(R.id.editText4);
+        final EditText editText = (EditText) findViewById(R.id.titleGoal);
+        final EditText editEmoji = (EditText) findViewById(R.id.emojiGoal);
 
-        button = (Button) findViewById(R.id.button2);
+        button = (Button) findViewById(R.id.furtherButton);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 name = editText.getText().toString();
-                emoji = editEmoji.getText().toString();
+                emoji = EmojiMap.replaceUnicodeEmojis(editEmoji.getText().toString());
                 Log.d(TAG,name);
-
-                new HttpAsyncTaskPOST().execute("http://139.59.158.39:8080/goal");
+                setContentView(R.layout.activity_entering_daily_goal_datepicker);
+                //new HttpAsyncTaskPOST().execute("http://139.59.158.39:8080/goal");
             }
 
         });

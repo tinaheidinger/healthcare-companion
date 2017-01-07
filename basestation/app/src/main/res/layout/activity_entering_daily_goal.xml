@@ -12,47 +12,67 @@
     android:weightSum="1">
 
 
-    <TextView
-        android:text="Neues Ziel erstellen:"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="170dp"
-        android:id="@+id/textView"
-        android:layout_alignBottom="@+id/editText3"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="94dp"
-        android:textSize="24sp"
-        android:textColor="@android:color/background_dark" />
-
-    <Button
-        android:text="speichern"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView"
-        android:layout_alignStart="@+id/editText3"
-        android:layout_marginTop="119dp"
-        android:id="@+id/button2" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="14dp"
-        android:id="@+id/editText4"
-        android:text="Emoji (optional)" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text="Hier eingeben.."
-        android:ems="10"
-        android:layout_marginTop="187dp"
-        android:id="@+id/editText3"
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/textView" />
+        android:layout_alignParentStart="true">
+
+        <TextView
+            android:text="Tagesziel bearbeiten"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/headerEditGoals"
+            android:gravity="center_horizontal"
+            android:textSize="30sp" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="72dp">
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:layout_below="@+id/textView"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/emojiGoal"
+                android:hint="Emoji aussuchen"
+                android:textSize="30sp"
+                android:background="@drawable/edittextstyle"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:id="@+id/titleGoal"
+                android:layout_alignParentTop="true"
+                android:layout_alignStart="@+id/textView"
+                android:hint="Titel des Tagesziels"
+                android:background="@drawable/edittextstyle"
+                android:singleLine="true"
+                android:textSize="24sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+        </LinearLayout>
+
+        <Button
+            android:text="weiter"
+            android:layout_width="268dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView"
+            android:id="@+id/furtherButton"
+            android:layout_gravity="right"/>
+    </LinearLayout>
 
 </RelativeLayout>
