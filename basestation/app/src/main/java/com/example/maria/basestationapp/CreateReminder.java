@@ -77,7 +77,17 @@ public class CreateReminder extends AppCompatActivity implements View.OnClickLis
                 editText.setText(data[0]);
                 editEmoji.setText(data[1]);
             }
+
+            date_time = intent.getIntArrayExtra("dateTime");
+            if(date_time != null){
+                year = date_time[0];
+                month = date_time[1];
+                day = date_time[2];
+                hour = date_time[3];
+                minute = date_time[4];
+            }
         }
+
     }
 
     private void loadPicker() {
@@ -106,7 +116,31 @@ public class CreateReminder extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
 
-        if (v == btn_time) {
+        if (v==btn_date) {
+            final Calendar c = Calendar.getInstance();
+            year = c.get(Calendar.YEAR);
+            month = c.get(Calendar.MONTH);
+            day = c.get(Calendar.DAY_OF_MONTH);
+
+            datePicker = new DatePickerDialog(this,
+                    new DatePickerDialog.OnDateSetListener() {
+
+                        @Override
+                        public void onDateSet(DatePicker view, int year,
+                                              int monthOfYear, int dayOfMonth) {
+
+                            editDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                            if(date_time==null){
+                                date_time = new int[5];
+                            }
+                            date_time[0] = year;
+                            date_time[1] = monthOfYear+1;
+                            date_time[2] = dayOfMonth;
+                        }
+                    }, year, month, day);
+            datePicker.show();
+
+        }else if (v == btn_time) {
             hidekeyboard(v);
 
             final Calendar c = Calendar.getInstance();
@@ -121,13 +155,16 @@ public class CreateReminder extends AppCompatActivity implements View.OnClickLis
                                               int minute) {
 
                             editTime.setText(hourOfDay + ":" + minute);
+                            if(date_time==null){
+                                date_time = new int[5];
+                            }
+                            date_time[3] = hourOfDay;
+                            date_time[4] = minute;
                         }
                     }, hour, minute, false);
             timePickerDialog.show();
-        }
 
-        if (v == backButton_picker) {
-
+        }else if (v == backButton_picker) {
 
             setContentView(R.layout.activity_reminder);
 
@@ -154,22 +191,27 @@ public class CreateReminder extends AppCompatActivity implements View.OnClickLis
 
             editText.setText(name);
             editEmoji.setText(EmojiMap.replaceCheatSheetEmojis(emoji));
-        }
 
-        if (v == furtherButton_picker) {
-            if (name.length() > 0 && date_time != null) {
+        }else if (v == furtherButton_picker) {
+            if (name.length() > 0 && editDate.getText().length() > 0 && editTime.getText().length() >= 0) {
                 Reminder reminder = new Reminder(emoji, name, date_time);
                 Intent intent = new Intent(CreateReminder.this, CreateReminder.class);
                 intent.putExtra("emoji", emoji);
                 intent.putExtra("name", name);
                 intent.putExtra("date_time", date_time);
 
+                Log.d(TAG, emoji+" n: "+name+" datum: "+date_time[0]+","+date_time[1]+","+date_time[2]+" zeit:"+
+                        date_time[3]+":"+date_time[4]);
+
                 Toast.makeText(getApplicationContext(),
-                        "Erinnerung wurde gespeichert. Einen Moment bitte..", Toast.LENGTH_LONG).show();
+                        "Erinnerung wird gespeichert. Einen Moment bitte..", Toast.LENGTH_LONG).show();
+
+                Intent i = new Intent(v.getContext(), ListReminders.class);
+                startActivityForResult(i, 0);
 
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage("Trage bitte einen Titel und die gewünschte Zeit ein!").setTitle("Info");
+                builder.setMessage("Trag bitte einen Titel und die gewünschte Zeit ein!").setTitle("Info");
                 builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
 
@@ -183,12 +225,10 @@ public class CreateReminder extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onFocusChange(View view, boolean b) {
-        if (view == editDate) {
+        if (view == editDate && b) {
             hidekeyboard(view);
             onClick(btn_date);
-        }
-
-        if (view == editTime) {
+        }else  if (view == editTime && b) {
             hidekeyboard(view);
             onClick(btn_time);
         }

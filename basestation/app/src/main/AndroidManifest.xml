@@ -25,7 +25,11 @@
         <activity
             android:name=".CreateDailyGoal"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".CreateReminder"></activity>
+        <activity android:name=".CreateReminder" />
+        <activity
+            android:name=".ListReminders"
+            android:label="@string/title_activity_list_reminders"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
