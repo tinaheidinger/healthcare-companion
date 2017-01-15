@@ -44,6 +44,16 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, 0);
             }
         });
+
+        ImageButton reminder = (ImageButton) findViewById(R.id.reminderButton);
+        reminder.setOnClickListener(new View.OnClickListener() {
+
+             @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), Reminder.class);
+                startActivityForResult(intent, 0);
+            }
+        });
     }
 
 }

@@ -45,16 +45,15 @@
 
                 <ImageButton
                     android:id="@+id/reminderButton"
-                    android:layout_width="0.0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1.0"
+                    android:layout_width="158dp"
+                    android:layout_height="158dp"
                     android:background="@android:color/transparent"
                     android:elevation="0dp"
                     android:layout_marginLeft="50dp"
                     android:adjustViewBounds="true"
                     android:scaleType="centerInside"
                     android:tint="@android:color/transparent"
-                    app:srcCompat="@drawable/reminder" />
+                    app:srcCompat="@drawable/remindericon" />
 
                 <ImageButton
                     android:id="@+id/fluidButton"

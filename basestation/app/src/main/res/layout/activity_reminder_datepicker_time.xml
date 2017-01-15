@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_entering_daily_goal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.maria.basestationapp.Reminder"
+    android:weightSum="1">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:background="#FFFFFF"
+        android:weightSum="1">
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1">
+
+            <Button
+                android:text="zurück"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/backBtnReminder"
+                android:layout_gravity="left"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="0dp"/>
+
+            <TextView
+                android:text="Wann möchtest du \n erinnert werden?"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/headerEditReminder"
+                android:gravity="center_horizontal"
+                android:textSize="30sp"
+                android:layout_weight="1" />
+
+            <Button
+                android:text="weiter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textViewReminder"
+                android:id="@+id/furtherBtnReminder"
+                android:layout_gravity="right" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:layout_marginTop="70dp"
+            android:layout_weight="1.59"
+            android:weightSum="1">
+
+            <EditText
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/in_date"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="70dp"
+                android:layout_marginRight="20dp"/>
+
+            <ImageButton
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:id="@+id/btn_date"
+                app:srcCompat="@drawable/calendar"
+                android:scaleType="centerInside"
+                android:layout_marginRight="100dp"/>
+
+            <EditText
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/in_time"
+                android:layout_below="@+id/in_date"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="20dp"/>
+
+            <ImageButton
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:scaleType="centerInside"
+                android:id="@+id/btn_time"
+                app:srcCompat="@drawable/clock"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

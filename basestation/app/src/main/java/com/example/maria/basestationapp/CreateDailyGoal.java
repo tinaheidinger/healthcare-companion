@@ -40,7 +40,7 @@ import java.util.Date;
  * Klasse um ein neues Tagesziel anzulegen und zu speichern
  * */
 public class CreateDailyGoal extends AppCompatActivity {
-    private static final String TAG = "EnteringDailyGoals";
+    private static final String TAG = "CreateDailyGoal.class";
     private static String name = "";
     private static String emoji = "";
 
