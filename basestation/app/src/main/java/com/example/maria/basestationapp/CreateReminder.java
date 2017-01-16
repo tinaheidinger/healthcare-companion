@@ -23,7 +23,7 @@ import java.util.Calendar;
 
 public class CreateReminder extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener {
 
-    private static final String TAG = "CreateDailyGoal.class";
+    private static final String TAG = "CreateReminder.class";
     private static String name = "";
     private static String emoji = "";
     private static int[] date_time;

@@ -63,6 +63,6 @@
 
 
     <include layout="@layout/content_daily_goals"
-        android:layout_height="787dp" />
+         />
 
 </android.support.design.widget.CoordinatorLayout>
