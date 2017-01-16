@@ -2,7 +2,6 @@ package com.example.maria.basestationapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.CalendarContract;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
@@ -14,7 +13,7 @@ import android.widget.ImageButton;
 * Avatar mit ImageButton-Funktionen enthalten
 * */
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements  View.OnClickListener{
     private static final String TAG = "MainActivity";
 
     @Override
@@ -38,15 +37,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.goalButton:
-                Intent intent1 = new Intent(view.getContext(), DailyGoals.class);
-                startActivityForResult(intent1, 0);
-                break;
-            case R.id.reminderButton:
-                Intent intent2 = new Intent(view.getContext(), ListReminders.class);
-                startActivityForResult(intent2, 0);
-                break;
-        }
+       switch (view.getId()){
+           case R.id.goalButton:
+                   Intent intent1 = new Intent(view.getContext(), DailyGoals.class);
+                   startActivityForResult(intent1, 0);
+               break;
+           case R.id.reminderButton:
+               Intent intent2 = new Intent(view.getContext(), ListReminders.class);
+               startActivityForResult(intent2, 0);
+               break;
+       }
     }
 }
