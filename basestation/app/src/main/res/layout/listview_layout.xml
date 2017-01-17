@@ -4,37 +4,52 @@
     android:layout_height="match_parent"
     android:weightSum="1">
 
-    <TextView
-        android:id="@+id/emoji"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="40sp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="100dp"
-         />
-    <TextView
-        android:id="@+id/name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginRight="10dp"
-         />
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/pen"
-        android:src="@drawable/pen"
-        android:layout_width="30dp"
-        android:layout_height="match_parent"
-        android:background="@android:color/transparent"
-        android:elevation="0dp"
-        android:adjustViewBounds="true"
-        android:layout_alignParentRight="true"
-        android:tint="@android:color/transparent"
-        android:layout_marginLeft="100dp"
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="5dip">
 
-         />
+            <TextView
+                android:id="@+id/emoji"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="40sp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="100dp"
+                 />
 
-   <!--> <ImageView
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="20dp"
+
+                 />
+
+            <ImageView
+                android:id="@+id/pen"
+                android:src="@drawable/edit"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:elevation="0dp"
+                android:adjustViewBounds="true"
+                android:layout_alignParentRight="true"
+                android:tint="@android:color/transparent"
+                android:layout_gravity="right"
+
+                 />
+        </TableRow>
+
+    </TableLayout>
+
+    <!--> <ImageView
         android:id="@+id/trash"
         android:src="@drawable/muell"
         android:layout_width="20dp"
