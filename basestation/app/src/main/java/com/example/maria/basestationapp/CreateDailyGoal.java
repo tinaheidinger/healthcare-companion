@@ -101,7 +101,7 @@ public class CreateDailyGoal extends AppCompatActivity {
         if (null != intent) {
             String data[]= intent.getStringArrayExtra("goal");
             if(data!=null) {
-                editText.setText(data[0]);
+                editEmoji.setText(data[0]);
                 editText.setText(data[1]);
             }
         }
@@ -136,8 +136,8 @@ public class CreateDailyGoal extends AppCompatActivity {
                         emoji = EmojiMap.replaceUnicodeEmojis(editEmoji.getText().toString());
 
                         post = new Goal(emoji, name,"");
+                        Log.d(TAG,"Goal"+editEmoji+" "+name);
                         //new HttpAsyncTaskPOST().execute("http://139.59.158.39:8080/goal");
-                        Log.d(TAG,name);
                     }
 
                 });
@@ -205,18 +205,9 @@ public class CreateDailyGoal extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
                 final Date item = (Date) parent.getItemAtPosition(position);
-                /*ArrayList<Date> newList=new ArrayList<Date>();
 
-                for(int i=0; i<dates.size(); i++){
-                    Log.d(TAG, "pruefe"+parseDate(item)+" und "+parseDate(dates.get(i)));
-                    if(parseDate(dates.get(i)).equals(parseDate(item))){
-                        Log.d(TAG, parseDate(item)+" und "+parseDate(dates.get(i))+" gleich");
-                    }else{
-                        newList.add(dates.get(i));
-                    }
-                }
-                dates=newList;
-                //updateListView();*/
+                dates.remove(item);
+                updateListView();
             }
 
         });

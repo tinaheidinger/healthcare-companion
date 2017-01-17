@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -48,6 +49,8 @@ public class DailyGoals extends Activity {
     private static NetworkInfo networkInfo;
     private static ArrayList<Goal> listGoals = new ArrayList<Goal>();
 
+    private Button menu;
+
     /* method starts when activity is called
     * views and data is requested and loaded to display
      *  */
@@ -75,11 +78,15 @@ public class DailyGoals extends Activity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        FloatingActionButton reload = (FloatingActionButton) this.findViewById(R.id.load);
-        reload.setOnClickListener(new View.OnClickListener() {
+
+        menu = (Button) findViewById(R.id.backButtonGoal);
+        menu.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                refresh();
+
+                Intent intent = new Intent(DailyGoals.this, MainActivity.class);
+                startActivity(intent);
             }
+
         });
     }
 
@@ -287,10 +294,15 @@ public class DailyGoals extends Activity {
         ArrayList<Goal> result = new ArrayList<Goal>();
 
         try {
+            Log.d(TAG, "before execute:"+jsonArray.length());
+            System.setProperty("http.keepAlive", "false");
             HttpResponse response = httpclient.execute(httpget);
+
+            Log.d(TAG, "after execute"+jsonArray.length());
             String server_response = null;
             server_response = EntityUtils.toString(response.getEntity());
             jsonArray = new JSONArray(server_response);
+
 
             if (jsonArray.length() > 0) {
                 String emoji = "";
@@ -301,7 +313,7 @@ public class DailyGoals extends Activity {
                     jsonObject = jsonArray.getJSONObject(i);
                     emoji = jsonObject.getString("emoji");
                     text = jsonObject.getString("text");
-                    emojimap = EmojiMap.replaceCheatSheetEmojis(":bike:");
+                    emojimap = EmojiMap.replaceCheatSheetEmojis(emoji);
                     goal = new Goal(emojimap, text, "Di");
                     Log.d(TAG, goal.toString());
                     result.add(goal);
@@ -309,7 +321,7 @@ public class DailyGoals extends Activity {
             }
 
         } catch (IOException e) {
-            Log.e(TAG, "IOException " + e.getMessage());
+            Log.e(TAG,"IOException GET"+ e.toString());
         } catch (JSONException e) {
             Log.e(TAG, "JSON Exception " + e.getMessage());
         }
