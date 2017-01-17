@@ -24,7 +24,9 @@
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC);
 
 TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300);
-unsigned long last_gesture = millis();
+unsigned long last_gesture_time = millis();
+int last_gesture_x;
+int last_gesture_y;
 
 void setup() {
   // put your setup code here, to run once:
@@ -40,6 +42,8 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   TSPoint p = ts.getPoint();
+  int delta_x;
+  int delta_y;
 
   // we have some minimum pressure we consider 'valid'
   // pressure of 0 means no pressing!
@@ -47,7 +51,7 @@ void loop() {
      return;
   }
 
-  unsigned long current_gesture = millis();
+  unsigned long current_gesture_time = millis();
   p.x = map(p.x, TS_MINX, TS_MAXX, 0, tft.width());
   p.y = map(p.y, TS_MINY, TS_MAXY, 0, tft.height());
 
@@ -61,13 +65,24 @@ void loop() {
   //Serial.println(current_gesture);
 
   // is it a continuing or new gesture?
-  if (current_gesture - last_gesture > 10) {
+  if (current_gesture_time - last_gesture_time > 100) {
     // new gesture 
     Serial.println("new gesture");
   } else {
-      // continuing gesture  
+      // continuing gesture
+      delta_x = p.x - last_gesture_x;
+      delta_y = p.y - last_gesture_y;
+
+      Serial.print("delta x:");
+      Serial.println(delta_x);
+      Serial.print("delta y:");
+      Serial.println(delta_y);
   }
 
-  last_gesture = current_gesture;
+  last_gesture_time = current_gesture_time;
+  last_gesture_x = p.x;
+  last_gesture_y = p.y;
+
+  delay(10);
 
 }
