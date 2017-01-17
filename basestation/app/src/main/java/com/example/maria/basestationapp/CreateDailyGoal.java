@@ -58,6 +58,8 @@ public class CreateDailyGoal extends AppCompatActivity {
     private ListView listviewDates;
     private StableArrayAdapter adapter;
 
+    private static Goal post;
+
     /**
      * wird beim ersten Starten aufgerufen und initialisiert die Elemente der View
      * */
@@ -132,8 +134,9 @@ public class CreateDailyGoal extends AppCompatActivity {
                     public void onClick(View v) {
                         name = editText.getText().toString();
                         emoji = EmojiMap.replaceUnicodeEmojis(editEmoji.getText().toString());
-                        backcheck=true;
-                        loadCalender();
+
+                        post = new Goal(emoji, name,"");
+                        //new HttpAsyncTaskPOST().execute("http://139.59.158.39:8080/goal");
                         Log.d(TAG,name);
                     }
 
@@ -148,6 +151,21 @@ public class CreateDailyGoal extends AppCompatActivity {
                 editText.setText(name);
                 editEmoji.setText(EmojiMap.replaceCheatSheetEmojis(emoji));
             }
+        });
+
+        furtherButton = (Button) findViewById(R.id.furtherButton);
+        furtherButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                name = editText.getText().toString();
+                emoji = EmojiMap.replaceUnicodeEmojis(editEmoji.getText().toString());
+
+                post = new Goal(emoji, name,"");
+                new HttpAsyncTaskPOST().execute("http://139.59.158.39:8080/goal");
+
+                Intent intent = new Intent(CreateDailyGoal.this, DailyGoals.class);
+                startActivity(intent);
+            }
+
         });
 
         calender = (CalendarView) findViewById(R.id.calendarView);
@@ -243,7 +261,7 @@ public class CreateDailyGoal extends AppCompatActivity {
 
             return POST(urls[0]);
         }
-        // onPostExecute displays the results of the AsyncTask.
+
         @Override
         protected void onPostExecute(String result) {
             Toast.makeText(getBaseContext(), "Neues Ziel gespeichert. Wird in einigen Augenblicken in die Liste übernommen. ", Toast.LENGTH_LONG).show();
@@ -271,8 +289,9 @@ public class CreateDailyGoal extends AppCompatActivity {
 
             JSONObject jsonObject = new JSONObject();
             jsonObject.accumulate("companion", 3);
-            jsonObject.accumulate("emoji", emoji);
-            jsonObject.accumulate("text", name);
+            jsonObject.accumulate("emoji", post.emoji);
+            jsonObject.accumulate("text", post.name);
+            jsonObject.accumulate("date",post.day);
 
             json = jsonObject.toString();
 

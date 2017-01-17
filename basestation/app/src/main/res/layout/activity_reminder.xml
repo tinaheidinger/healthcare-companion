@@ -99,9 +99,11 @@
         <ImageView
             android:layout_width="200dp"
             android:layout_height="163dp"
-            app:srcCompat="@drawable/reminderimage"
+            app:srcCompat="@drawable/cat"
             android:id="@+id/reminderImage"
-            android:layout_marginLeft="300dp"/>
+            android:layout_marginLeft="300dp"
+            android:layout_marginTop="90dp"
+            />
 
     </LinearLayout>
 

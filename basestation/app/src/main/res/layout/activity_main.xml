@@ -16,18 +16,19 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:background="#ffffaa">
+            android:background="#c6e2ff">
 
             <ImageView
                 android:id="@+id/avatar"
-                android:layout_width="match_parent"
-                android:layout_height="238dp"
-                app:srcCompat="@drawable/cutedog"
-                android:radius="30px" />
+                android:layout_width="994dp"
+                android:layout_height="288dp"
+                app:srcCompat="@drawable/cat"
+                android:radius="30px"
+                android:layout_marginTop="30dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="116dp"
                 android:layout_margin="50dp">
 
                 <ImageButton
@@ -41,19 +42,20 @@
                     android:adjustViewBounds="true"
                     android:scaleType="centerInside"
                     android:tint="@android:color/transparent"
-                    app:srcCompat="@drawable/star" />
+                    app:srcCompat="@drawable/tagesziel_button" />
 
                 <ImageButton
                     android:id="@+id/reminderButton"
-                    android:layout_width="158dp"
-                    android:layout_height="158dp"
+                    android:layout_width="0.0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.0"
                     android:background="@android:color/transparent"
                     android:elevation="0dp"
                     android:layout_marginLeft="50dp"
                     android:adjustViewBounds="true"
                     android:scaleType="centerInside"
                     android:tint="@android:color/transparent"
-                    app:srcCompat="@drawable/remindericon" />
+                    app:srcCompat="@drawable/erinnerung_button" />
 
                 <ImageButton
                     android:id="@+id/fluidButton"
@@ -66,7 +68,7 @@
                     android:scaleType="centerInside"
                     android:layout_marginLeft="50dp"
                     android:tint="@android:color/transparent"
-                    app:srcCompat="@drawable/glas" />
+                    app:srcCompat="@drawable/wasser_button" />
 
                 <ImageButton
                     android:id="@+id/walkButton"
@@ -79,7 +81,7 @@
                     android:adjustViewBounds="true"
                     android:scaleType="centerInside"
                     android:tint="@android:color/transparent"
-                    app:srcCompat="@drawable/footprints" />
+                    app:srcCompat="@drawable/schritte_button" />
 
 
             </LinearLayout>

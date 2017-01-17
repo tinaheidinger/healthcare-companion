@@ -35,7 +35,8 @@
                 android:id="@+id/backButtonGoal"
                 android:layout_gravity="left"
                 android:layout_marginLeft="50dp"
-                android:layout_marginRight="0dp"/>
+                android:layout_marginRight="0dp"
+                android:background="@drawable/buttons"/>
 
             <TextView
                 android:text="Welches Ziel \n möchtest du erreichen?"
@@ -52,7 +53,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/textView"
                 android:id="@+id/furtherButton"
-                android:layout_gravity="right" />
+                android:layout_gravity="right"
+                android:background="@drawable/buttons"/>
         </LinearLayout>
 
         <LinearLayout
@@ -99,7 +101,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/squirrel"
+            app:srcCompat="@drawable/cat"
             android:id="@+id/imageView" />
 
     </LinearLayout>
