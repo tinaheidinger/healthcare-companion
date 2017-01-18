@@ -97,5 +97,16 @@ def get_fluid():
     response.content_type = 'application/json'
     return json.dumps(fluid)
 
+# returns steps statistics
+@get('/steps')
+def get_steps():
+    companion = request.query.companion
+    period = request.query.period
+    steps_data = {'2017-01-18': 9440, '2017-01-17': 8031, '2017-01-16': 11741}
+    steps = dict(companion=companion, period=period, steps=steps_data)
+    response.status = 200
+    response.content_type = 'application/json'
+    return json.dumps(steps)
+
 
 run(host='0.0.0.0', port=8080, debug=False, reloader=True)
