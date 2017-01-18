@@ -20,8 +20,8 @@
 #include "TouchScreen.h"
 
 // These are the four touchscreen analog pins
-#define YP A2  // must be an analog pin, use "An" notation!
-#define XM A3  // must be an analog pin, use "An" notation!
+#define YP A0  // must be an analog pin, use "An" notation!
+#define XM A1  // must be an analog pin, use "An" notation!
 #define YM 8   // can be a digital pin
 #define XP 9 // can be a digital pin
 
@@ -46,6 +46,20 @@ Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC);
 TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300);
 unsigned long last_gesture = millis();
 
+// Step counting stuff
+// Ueses analogue pins A2, A3 and A4
+const int xpin=A2;
+int ypin=A3;
+int zpin=A4;
+float threshhold=80.0;
+float xval[100]={0};
+float yval[100]={0};
+float zval[100]={0};
+float xavg;
+  float yavg;
+  float zavg;
+int steps,flag=0;
+
 #define SD_CS 10
 
 void setup(void) {
@@ -65,9 +79,11 @@ void setup(void) {
   }
   Serial.println("OK!");
 
-  bmpDraw("emoji/1f0cf.bmp", 30, 90);
-  bmpDraw("emoji/1f0cf.bmp", 130, 90);
-  bmpDraw("emoji/1f0cf.bmp", 230, 90);
+  // Calibrate accelerometer
+  calibrate();
+
+  tft.setTextSize(5);
+
 }
 
 void loop() {
@@ -90,8 +106,8 @@ void loop() {
   Serial.println(")");
   */
 
-  //Serial.println(last_gesture);
-  //Serial.println(current_gesture);
+  Serial.println(last_gesture);
+  Serial.println(current_gesture);
 
   // is it a continuing or new gesture?
   if (current_gesture - last_gesture > 10) {
@@ -103,6 +119,71 @@ void loop() {
 
   last_gesture = current_gesture;
 
+// Start step count
+  int acc=0;
+  float totvect[100]={0};
+  float totave[100]={0};
+  //float sum1,sum2,sum3=0;
+  float xaccl[100]={0};
+   float yaccl[100]={0};
+    float zaccl[100]={0};
+   // float x,y,z;
+   
+  
+  for (int i=0;i<100;i++)
+  {
+    xaccl[i]=float(analogRead(xpin));
+    delay(1);
+
+
+  //delay(100);
+  //x=sum1/100.0;
+
+  //Serial.println(xavg);
+
+
+  yaccl[i]=float(analogRead(ypin));
+  delay(1);
+
+  //sum2=yaccl[i]+sum2;
+
+  //y=sum2/100.0;
+
+  //Serial.println(yavg);
+  //delay(100);
+
+  zaccl[i]=float(analogRead(zpin));
+  delay(1);
+
+  //sum3=zaccl[i]+sum3;
+  //z=sum3/100;
+
+
+  totvect[i] = sqrt(((xaccl[i]-xavg)* (xaccl[i]-xavg))+ ((yaccl[i] - yavg)*(yaccl[i] - yavg)) + ((zval[i] - zavg)*(zval[i] - zavg)));
+  totave[i] = (totvect[i] + totvect[i-1]) / 2 ;
+  //acc=acc+totave[i];
+  Serial.println(totave[i]);
+  delay(200);
+
+  //cal steps 
+  if (totave[i]>threshhold && flag==0)
+  {
+    steps=steps+1;
+    flag=1;
+ 
+  }
+  else if (totave[i] > threshhold && flag==1)
+  {
+  //do nothing 
+  }
+    if (totave[i] <threshhold  && flag==1)
+    {flag=0;}
+    Serial.println('\n');
+    Serial.print("steps=");
+    Serial.println(steps);
+    tft.setCursor(0,0);
+    tft.print(steps);
+  }
 }
 
 // This function opens a Windows Bitmap (BMP) file and
@@ -243,4 +324,43 @@ uint32_t read32(File &f) {
   ((uint8_t *)&result)[2] = f.read();
   ((uint8_t *)&result)[3] = f.read(); // MSB
   return result;
+}
+
+// Calibrate the accelerometer
+void calibrate()
+{
+  float sum=0;
+  float sum1=0;
+  float sum2=0;
+for (int i=0;i<100;i++)
+{
+xval[i]=float(analogRead(xpin));
+
+sum=xval[i]+sum;
+}
+delay(100);
+xavg=sum/100.0;
+
+//Serial.println(xavg);
+
+for (int j=0;j<100;j++)
+{
+xval[j]=float(analogRead(xpin));
+
+sum1=xval[j]+sum1;
+}
+yavg=sum1/100.0;
+
+//Serial.println(yavg);
+delay(100);
+for (int i=0;i<100;i++)
+{
+zval[i]=float(analogRead(zpin));
+
+sum2=zval[i]+sum2;
+}
+zavg=sum2/100.0;
+delay(100);
+//Serial.println(zavg);
+
 }
