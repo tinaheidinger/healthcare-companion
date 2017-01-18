@@ -21,6 +21,10 @@ android {
     }
 }
 
+repositories {
+    maven { url "https://jitpack.io" }
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -31,6 +35,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile files('/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/libs/src/main/java/com/example/libs/httpcore-4.4.5.jar')
     compile files('/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/libs/src/main/java/com/example/libs/httpclient-4.5.2.jar')
+    compile 'com.github.npanigrahy:Custom-Calendar-View:v1.1'
 }
 
 android{

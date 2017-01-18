@@ -314,7 +314,7 @@ public class DailyGoals extends Activity {
                     emoji = jsonObject.getString("emoji");
                     text = jsonObject.getString("text");
                     emojimap = EmojiMap.replaceCheatSheetEmojis(emoji);
-                    goal = new Goal(emojimap, text, "Di");
+                    goal = new Goal(emojimap, text);
                     Log.d(TAG, goal.toString());
                     result.add(goal);
                 }

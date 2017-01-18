@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/src/main/assets"/><source path="/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/assets"/><source path="/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/generated/assets/shaders/debug"/></dataSet><dataSet config="debug"><source path="/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/src/debug/assets"/></dataSet></merger>

@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/res/merged/androidTest/debug/drawable/button_previous_month_selector.xml",
+        "source": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/bundles/debug/res/drawable/button_previous_month_selector.xml"
+    },
+    {
+        "merged": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/res/merged/androidTest/debug/drawable/button_next_month_selector.xml",
+        "source": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/bundles/debug/res/drawable/button_next_month_selector.xml"
+    }
+]

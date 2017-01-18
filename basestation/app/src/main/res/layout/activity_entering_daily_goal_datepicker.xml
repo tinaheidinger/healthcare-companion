@@ -32,11 +32,10 @@
                     android:id="@+id/backButton"
                     android:layout_gravity="left"
                     android:layout_marginLeft="50dp"
-                    android:layout_marginRight="0dp"
-                    android:background="@drawable/buttons"/>
+                    android:layout_marginRight="0dp"/>
 
                 <TextView
-                    android:text="An welchen Tagen möchtest \n du dein Ziel erreichen?"
+                    android:text="Deine erreichten \n Tagesziele im Überblick:"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/headerEditGoals"
@@ -50,16 +49,16 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/textView"
                     android:id="@+id/furtherButton"
-                    android:layout_gravity="right"
-                    android:background="@drawable/buttons"/>
+                    android:layout_gravity="right" />
             </LinearLayout>
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:weightSum="1">
 
-                <CalendarView
+                <!--<CalendarView
                     style="@style/calenderview"
                     android:layout_width="576dp"
                     android:layout_height="268dp"
@@ -69,14 +68,21 @@
                     android:id="@+id/calendarView"
                     android:minDate="01/01/2017"
                     android:maxDate="31/12/2020"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"--> />
 
-                <ListView
-                    android:layout_width="325dp"
-                    android:layout_height="match_parent"
-                    android:id="@+id/listDates"
-                    android:layout_marginTop="70dp"
-                    />
+                <com.stacktips.view.CustomCalendarView
+                    android:id="@+id/calendarView"
+                    android:layout_width="576dp"
+                    android:layout_height="301dp"
+                    android:layout_marginLeft="140dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="50dp"
+                    android:background="#98F5FF"
+                    android:minDate="01/01/2017"
+                    android:maxDate="31/12/2020">
+                </com.stacktips.view.CustomCalendarView>
+
+
             </LinearLayout>
 
         </LinearLayout>

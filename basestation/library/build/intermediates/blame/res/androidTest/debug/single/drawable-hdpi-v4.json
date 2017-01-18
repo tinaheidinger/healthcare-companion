@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4/ic_arrow_up_gray.png",
+        "source": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/bundles/debug/res/drawable-hdpi-v4/ic_arrow_up_gray.png"
+    },
+    {
+        "merged": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4/ic_arrow_up_blue.png",
+        "source": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/bundles/debug/res/drawable-hdpi-v4/ic_arrow_up_blue.png"
+    },
+    {
+        "merged": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4/ic_arrow_up_gray_soft.png",
+        "source": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/bundles/debug/res/drawable-hdpi-v4/ic_arrow_up_gray_soft.png"
+    },
+    {
+        "merged": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4/ic_arrow_up_blue_soft.png",
+        "source": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/bundles/debug/res/drawable-hdpi-v4/ic_arrow_up_blue_soft.png"
+    }
+]
