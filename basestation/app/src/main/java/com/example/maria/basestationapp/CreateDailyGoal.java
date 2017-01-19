@@ -314,7 +314,7 @@ public class CreateDailyGoal extends AppCompatActivity {
             String json = "";
 
             JSONObject jsonObject = new JSONObject();
-            jsonObject.accumulate("companion", 3);
+            jsonObject.accumulate("companion", 4);
             jsonObject.accumulate("emoji", post.emoji);
             jsonObject.accumulate("text", post.name);
 

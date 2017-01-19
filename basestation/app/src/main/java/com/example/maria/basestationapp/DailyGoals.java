@@ -211,7 +211,7 @@ public class DailyGoals extends Activity {
             String json = "";
 
             JSONObject jsonObject = new JSONObject();
-            jsonObject.accumulate("companion", 1);
+            jsonObject.accumulate("companion", 4);
             jsonObject.accumulate("emoji", "0x1F34E");
             jsonObject.accumulate("text", "jeden Tag Obst essen");
 
@@ -288,7 +288,7 @@ public class DailyGoals extends Activity {
         Log.d(TAG, "GET Method started: connected" + networkInfo.toString());
 
         HttpClient httpclient = new DefaultHttpClient();
-        HttpGet httpget = new HttpGet(url + "?companion=3");
+        HttpGet httpget = new HttpGet(url + "?companion=4");
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObject = null;
         ArrayList<Goal> result = new ArrayList<Goal>();

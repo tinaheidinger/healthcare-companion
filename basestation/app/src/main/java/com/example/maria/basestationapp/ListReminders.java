@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -42,6 +43,8 @@ public class ListReminders extends AppCompatActivity {
 
     private static ArrayList<Reminder> listReminders = new ArrayList<Reminder>();
 
+    private Button menu;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,13 +52,23 @@ public class ListReminders extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_reminders);
 
-        listReminders.add(new Reminder(EmojiMap.replaceCheatSheetEmojis(":smiley:"), "test"));
+        //listReminders.add(new Reminder(EmojiMap.replaceCheatSheetEmojis(":pill:"), "Blutdruck Pillen"));
+
+        menu = (Button) findViewById(R.id.menuReminder);
+        menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ListReminders.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
         loadEntries();
     }
 
     protected void loadEntries() {
         Log.d(TAG, "load ... " + listReminders.toString());
-       // new DailyGoals.HttpAsyncTaskGET().execute("http://139.59.158.39:8080/goals");
+        new ListReminders.HttpAsyncTaskGET().execute("http://139.59.158.39:8080/reminders");
         final ListView listview = (ListView) findViewById(R.id.reminderlistView);
 
         final StableArrayAdapter adapter = new StableArrayAdapter(this, listReminders);
@@ -117,7 +130,7 @@ public class ListReminders extends AppCompatActivity {
         Log.d(TAG, "GET Method started: connected" + networkInfo.toString());
 
         HttpClient httpclient = new DefaultHttpClient();
-        HttpGet httpget = new HttpGet(url + "?companion=2");
+        HttpGet httpget = new HttpGet(url + "?companion=3");
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObject = null;
         ArrayList<Reminder> result = new ArrayList<Reminder>();
@@ -142,7 +155,7 @@ public class ListReminders extends AppCompatActivity {
                     jsonObject = jsonArray.getJSONObject(i);
                     emoji = jsonObject.getString("emoji");
                     text = jsonObject.getString("text");
-                    emojimap = EmojiMap.replaceCheatSheetEmojis(":bike:");
+                    emojimap = EmojiMap.replaceCheatSheetEmojis(emoji);
                     reminder = new Reminder(emojimap, text);
                     Log.d(TAG, reminder.toString());
                     result.add(reminder);
