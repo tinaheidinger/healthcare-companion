@@ -86,6 +86,15 @@ def post_goal():
     response.content_type = 'application/json'
     return json.dumps(reminder)
 
+# lists all goals for a specified companion
+@get('/reminders')
+def get_reminders():
+    companion = request.query.companion
+    reminders = list(table_reminders.find(companion=companion))
+    response_status = 200
+    response.content_type = 'application/json'
+    return json.dumps(reminders)
+
 # returns fluid statistics
 @get('/fluid')
 def get_fluid():
