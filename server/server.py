@@ -1,5 +1,5 @@
 import os
-from bottle import run, request, response, get, post, put
+from bottle import run, request, response, get, post, put, delete
 import dataset
 import requests
 import json
@@ -45,7 +45,7 @@ def post_goal():
     goal['text'] = request.json['text']
     goal['active'] = True
     goal['id'] = table_goals.insert(goal)
-    response.status = 200
+    response.status = 201
     response.content_type = 'application/json'
     return json.dumps(goal)
 
@@ -68,6 +68,13 @@ def set_active(id):
     response.content_type = 'application/json'
     return json.dumps(goal)
 
+# deletes a goal
+@delete('/goal/<id:int>')
+def delete_goal(id):
+    table_goals.delete(id=id)
+    response_status = 200
+    return
+
 # creates a new reminder
 @expect_json
 @post('/reminder')
@@ -82,11 +89,11 @@ def post_goal():
         reminder['weekday'] = request.json['weekday']
     reminder['active'] = True
     reminder['id'] = table_reminders.insert(reminder)
-    response.status = 200
+    response.status = 201
     response.content_type = 'application/json'
     return json.dumps(reminder)
 
-# lists all goals for a specified companion
+# lists all reminders for a specified companion
 @get('/reminders')
 def get_reminders():
     companion = request.query.companion
@@ -94,6 +101,13 @@ def get_reminders():
     response_status = 200
     response.content_type = 'application/json'
     return json.dumps(reminders)
+
+# deletes a reminder
+@delete('/reminder/<id:int>')
+def delete_reminder(id):
+    table_reminders.delete(id=id)
+    response_status = 200
+    return
 
 # returns fluid statistics
 @get('/fluid')
