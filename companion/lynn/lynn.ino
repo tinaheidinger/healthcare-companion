@@ -78,44 +78,11 @@ void checkTouch() {
   p.x = map(p.x, TS_MINX, TS_MAXX, 0, tft.width());
   p.y = map(p.y, TS_MINY, TS_MAXY, 0, tft.height());
 
-  /*
-  Serial.print("("); Serial.print(p.x);
-  Serial.print(", "); Serial.print(p.y);
-  Serial.println(")");
-  */
-
-  Serial.println(last_gesture);
-  Serial.println(current_gesture);
-
-  // is it a continuing or new gesture?
-  if (current_gesture - last_gesture > 10) {
-    // new gesture 
-    Serial.println("new gesture");
-
-    // for testing touch movement !
-    // does not yet work between touches, and does not compute right
-    if(firstx == 0)
-    {
-      firstx = p.x;
-    }
-    if(p.x > firstx) {
-      xtouchoffset -= p.x - firstx;
-    } else {
-      xtouchoffset += firstx - p.x;
-    }
-    firstx = p.x;
-    Serial.println(xtouchoffset);
-    
-  } else {
-      // continuing gesture  
-  }
-
-  last_gesture = current_gesture;
   
 }
 
 //create a couple timers that will fire repeatedly every x ms
-TimedAction touchThread = TimedAction(500, checkTouch);
+TimedAction touchThread = TimedAction(200, checkTouch);
 
 
 #define SD_CS 10
@@ -123,10 +90,12 @@ TimedAction touchThread = TimedAction(500, checkTouch);
 void setup(void) {
   Serial.begin(9600);
 
+  delay(2000);
+
   tft.begin();
   
   tft.setRotation(1);
-  
+
   tft.fillScreen(ILI9341_BLACK);
   
   //yield();
@@ -140,19 +109,16 @@ void setup(void) {
   // Calibrate accelerometer
   calibrate();
 
+  fillHomescreen();
   tft.setTextSize(5);
-  tft.setCursor(0,0);
-    tft.print(0);
-
+  /*
+   tft.setCursor(0,0);
+   tft.print(0);
+  */
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-
-  // For testing touch - movement !
-  int xoffset = 100 + xtouchoffset;
-  tft.fillRect(xoffset, 100, 50, 50, ILI9341_BLUE);
-
   
   // Start step count
   int acc=0;
@@ -206,12 +172,38 @@ void loop() {
     Serial.println("new step computed!");
     Serial.print("steps=");
     Serial.println(steps);
+    /*
     tft.fillRect(0, 0, 60, 50, ILI9341_BLACK);
     tft.setCursor(0,0);
     tft.print(steps);
     laststeps = steps;
+    */
     }
   }
+}
+
+void fillHomescreen(){
+
+  tft.fillScreen(ILI9341_BLACK);
+  
+  tft.setTextSize(5);
+  tft.setCursor(100,20);
+  tft.print("Lynn");
+
+ /*
+  * Info:  X = Breite, 0 - 340
+  * X = Höhe, 0 - 240
+  * bmpDraw(filename, X, Y) immer upper left corner
+  * 
+  * Touch: goals: (0-80 / 100-180 ?)
+  * reminder: 80-160
+  * water: 160-232
+  * steps: 232-340
+  */
+  bmpDraw("goals.bmp", 0, 100);
+  bmpDraw("reminder.bmp", 80, 100);
+  bmpDraw("water.bmp", 162, 100);
+  bmpDraw("steps.bmp", 232, 100);
 }
 
 
