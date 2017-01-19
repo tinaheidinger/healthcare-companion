@@ -18,6 +18,7 @@
 #include <SPI.h>
 #include <SD.h>
 #include "TouchScreen.h"
+#include <TimedAction.h>
 
 // These are the four touchscreen analog pins
 #define YP A0  // must be an analog pin, use "An" notation!
@@ -45,20 +46,77 @@ Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC);
 
 TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300);
 unsigned long last_gesture = millis();
+float firstx = 0;
+float xtouchoffset = 0;
 
 // Step counting stuff
 // Ueses analogue pins A2, A3 and A4
 const int xpin=A2;
 int ypin=A3;
 int zpin=A4;
-float threshhold=80.0;
+float threshhold=100.0;
 float xval[100]={0};
 float yval[100]={0};
 float zval[100]={0};
 float xavg;
   float yavg;
   float zavg;
-int steps,flag=0;
+int steps,flag,laststeps=0;
+
+
+void checkTouch() {
+  TSPoint p = ts.getPoint();
+
+  // we have some minimum pressure we consider 'valid'
+  // pressure of 0 means no pressing!
+  
+  if (p.z < MINPRESSURE || p.z > MAXPRESSURE) {
+    return;
+  }
+  
+  unsigned long current_gesture = millis();
+  p.x = map(p.x, TS_MINX, TS_MAXX, 0, tft.width());
+  p.y = map(p.y, TS_MINY, TS_MAXY, 0, tft.height());
+
+  /*
+  Serial.print("("); Serial.print(p.x);
+  Serial.print(", "); Serial.print(p.y);
+  Serial.println(")");
+  */
+
+  Serial.println(last_gesture);
+  Serial.println(current_gesture);
+
+  // is it a continuing or new gesture?
+  if (current_gesture - last_gesture > 10) {
+    // new gesture 
+    Serial.println("new gesture");
+
+    // for testing touch movement !
+    // does not yet work between touches, and does not compute right
+    if(firstx == 0)
+    {
+      firstx = p.x;
+    }
+    if(p.x > firstx) {
+      xtouchoffset -= p.x - firstx;
+    } else {
+      xtouchoffset += firstx - p.x;
+    }
+    firstx = p.x;
+    Serial.println(xtouchoffset);
+    
+  } else {
+      // continuing gesture  
+  }
+
+  last_gesture = current_gesture;
+  
+}
+
+//create a couple timers that will fire repeatedly every x ms
+TimedAction touchThread = TimedAction(500, checkTouch);
+
 
 #define SD_CS 10
 
@@ -83,43 +141,20 @@ void setup(void) {
   calibrate();
 
   tft.setTextSize(5);
+  tft.setCursor(0,0);
+    tft.print(0);
 
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  TSPoint p = ts.getPoint();
 
-  // we have some minimum pressure we consider 'valid'
-  // pressure of 0 means no pressing!
-  if (p.z < MINPRESSURE || p.z > MAXPRESSURE) {
-     return;
-  }
+  // For testing touch - movement !
+  int xoffset = 100 + xtouchoffset;
+  tft.fillRect(xoffset, 100, 50, 50, ILI9341_BLUE);
 
-  unsigned long current_gesture = millis();
-  p.x = map(p.x, TS_MINX, TS_MAXX, 0, tft.width());
-  p.y = map(p.y, TS_MINY, TS_MAXY, 0, tft.height());
-
-  /*
-  Serial.print("("); Serial.print(p.x);
-  Serial.print(", "); Serial.print(p.y);
-  Serial.println(")");
-  */
-
-  Serial.println(last_gesture);
-  Serial.println(current_gesture);
-
-  // is it a continuing or new gesture?
-  if (current_gesture - last_gesture > 10) {
-    // new gesture 
-    Serial.println("new gesture");
-  } else {
-      // continuing gesture  
-  }
-
-  last_gesture = current_gesture;
-
-// Start step count
+  
+  // Start step count
   int acc=0;
   float totvect[100]={0};
   float totave[100]={0};
@@ -129,41 +164,29 @@ void loop() {
     float zaccl[100]={0};
    // float x,y,z;
    
-  
   for (int i=0;i<100;i++)
   {
+    // check touch thread timing (every X millisecs, do checkTouch()
+    touchThread.check();
+    
     xaccl[i]=float(analogRead(xpin));
     delay(1);
 
-
   //delay(100);
   //x=sum1/100.0;
-
   //Serial.println(xavg);
-
 
   yaccl[i]=float(analogRead(ypin));
   delay(1);
 
-  //sum2=yaccl[i]+sum2;
-
-  //y=sum2/100.0;
-
-  //Serial.println(yavg);
-  //delay(100);
-
   zaccl[i]=float(analogRead(zpin));
   delay(1);
-
-  //sum3=zaccl[i]+sum3;
-  //z=sum3/100;
-
 
   totvect[i] = sqrt(((xaccl[i]-xavg)* (xaccl[i]-xavg))+ ((yaccl[i] - yavg)*(yaccl[i] - yavg)) + ((zval[i] - zavg)*(zval[i] - zavg)));
   totave[i] = (totvect[i] + totvect[i-1]) / 2 ;
   //acc=acc+totave[i];
-  Serial.println(totave[i]);
-  delay(200);
+  //Serial.println(totave[i]);
+  delay(100);
 
   //cal steps 
   if (totave[i]>threshhold && flag==0)
@@ -178,13 +201,21 @@ void loop() {
   }
     if (totave[i] <threshhold  && flag==1)
     {flag=0;}
-    Serial.println('\n');
+    if(steps > laststeps)
+    {
+    Serial.println("new step computed!");
     Serial.print("steps=");
     Serial.println(steps);
+    tft.fillRect(0, 0, 60, 50, ILI9341_BLACK);
     tft.setCursor(0,0);
     tft.print(steps);
+    laststeps = steps;
+    }
   }
 }
+
+
+
 
 // This function opens a Windows Bitmap (BMP) file and
 // displays it at the given coordinates.  It's sped up
