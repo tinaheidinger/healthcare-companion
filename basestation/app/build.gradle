@@ -33,9 +33,10 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.0.1'
     compile 'com.android.support:design:25.0.1'
     testCompile 'junit:junit:4.12'
-    compile files('/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/libs/src/main/java/com/example/libs/httpcore-4.4.5.jar')
-    compile files('/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/libs/src/main/java/com/example/libs/httpclient-4.5.2.jar')
+    compile files('/src/main/libs/httpcore-4.4.5.jar')
+    compile files('/src/main/libs/httpclient-4.5.2.jar')
     compile 'com.github.npanigrahy:Custom-Calendar-View:v1.1'
+    compile 'com.jjoe64:graphview:4.2.1'
 }
 
 android{
@@ -46,4 +47,8 @@ android{
         exclude'META-INF/LICENSE.txt'
         exclude'META-INF/NOTICE.txt'
     }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
 }

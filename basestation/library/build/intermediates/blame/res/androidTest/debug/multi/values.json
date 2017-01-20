@@ -1,6 +1,6 @@
 [
     {
-        "outputFile": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values/values.xml",
+        "outputFile": "E:\\Dokumente\\@Uni\\TU\\Sem4\\ProRe1u2\\companion-projekt\\basestation\\library\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values\\values.xml",
         "map": [
             {
                 "to": {
@@ -11,7 +11,7 @@
                     "endOffset": 90
                 },
                 "from": {
-                    "file": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/bundles/debug/res/values/values.xml",
+                    "file": "E:\\Dokumente\\@Uni\\TU\\Sem4\\ProRe1u2\\companion-projekt\\basestation\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 2,
                         "startColumn": 4,
@@ -30,7 +30,7 @@
                     "endOffset": 145
                 },
                 "from": {
-                    "file": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/bundles/debug/res/values/values.xml",
+                    "file": "E:\\Dokumente\\@Uni\\TU\\Sem4\\ProRe1u2\\companion-projekt\\basestation\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 3,
                         "startColumn": 4,
@@ -49,7 +49,7 @@
                     "endOffset": 209
                 },
                 "from": {
-                    "file": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/bundles/debug/res/values/values.xml",
+                    "file": "E:\\Dokumente\\@Uni\\TU\\Sem4\\ProRe1u2\\companion-projekt\\basestation\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 4,
                         "startColumn": 4,
@@ -68,7 +68,7 @@
                     "endOffset": 267
                 },
                 "from": {
-                    "file": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/bundles/debug/res/values/values.xml",
+                    "file": "E:\\Dokumente\\@Uni\\TU\\Sem4\\ProRe1u2\\companion-projekt\\basestation\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 5,
                         "startColumn": 4,
@@ -87,7 +87,7 @@
                     "endOffset": 325
                 },
                 "from": {
-                    "file": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/bundles/debug/res/values/values.xml",
+                    "file": "E:\\Dokumente\\@Uni\\TU\\Sem4\\ProRe1u2\\companion-projekt\\basestation\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 6,
                         "startColumn": 4,
@@ -106,7 +106,7 @@
                     "endOffset": 365
                 },
                 "from": {
-                    "file": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/bundles/debug/res/values/values.xml",
+                    "file": "E:\\Dokumente\\@Uni\\TU\\Sem4\\ProRe1u2\\companion-projekt\\basestation\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 7,
                         "startColumn": 4,
@@ -125,7 +125,7 @@
                     "endOffset": 1069
                 },
                 "from": {
-                    "file": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/bundles/debug/res/values/values.xml",
+                    "file": "E:\\Dokumente\\@Uni\\TU\\Sem4\\ProRe1u2\\companion-projekt\\basestation\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 9,
                         "startColumn": 4,
@@ -144,7 +144,7 @@
                     "endOffset": 1123
                 },
                 "from": {
-                    "file": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/bundles/debug/res/values/values.xml",
+                    "file": "E:\\Dokumente\\@Uni\\TU\\Sem4\\ProRe1u2\\companion-projekt\\basestation\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 10,
                         "startColumn": 4,
@@ -163,7 +163,7 @@
                     "endOffset": 1172
                 },
                 "from": {
-                    "file": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/bundles/debug/res/values/values.xml",
+                    "file": "E:\\Dokumente\\@Uni\\TU\\Sem4\\ProRe1u2\\companion-projekt\\basestation\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 11,
                         "startColumn": 4,
@@ -182,7 +182,7 @@
                     "endOffset": 1228
                 },
                 "from": {
-                    "file": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/bundles/debug/res/values/values.xml",
+                    "file": "E:\\Dokumente\\@Uni\\TU\\Sem4\\ProRe1u2\\companion-projekt\\basestation\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 12,
                         "startColumn": 4,
@@ -201,7 +201,7 @@
                     "endOffset": 1282
                 },
                 "from": {
-                    "file": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/bundles/debug/res/values/values.xml",
+                    "file": "E:\\Dokumente\\@Uni\\TU\\Sem4\\ProRe1u2\\companion-projekt\\basestation\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 13,
                         "startColumn": 4,
@@ -220,7 +220,7 @@
                     "endOffset": 1331
                 },
                 "from": {
-                    "file": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/bundles/debug/res/values/values.xml",
+                    "file": "E:\\Dokumente\\@Uni\\TU\\Sem4\\ProRe1u2\\companion-projekt\\basestation\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 14,
                         "startColumn": 4,
@@ -239,7 +239,7 @@
                     "endOffset": 1391
                 },
                 "from": {
-                    "file": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/bundles/debug/res/values/values.xml",
+                    "file": "E:\\Dokumente\\@Uni\\TU\\Sem4\\ProRe1u2\\companion-projekt\\basestation\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 15,
                         "startColumn": 4,
@@ -258,7 +258,7 @@
                     "endOffset": 1439
                 },
                 "from": {
-                    "file": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/bundles/debug/res/values/values.xml",
+                    "file": "E:\\Dokumente\\@Uni\\TU\\Sem4\\ProRe1u2\\companion-projekt\\basestation\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 16,
                         "startColumn": 4,
@@ -277,7 +277,7 @@
                     "endOffset": 1477
                 },
                 "from": {
-                    "file": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/bundles/debug/res/values/values.xml",
+                    "file": "E:\\Dokumente\\@Uni\\TU\\Sem4\\ProRe1u2\\companion-projekt\\basestation\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 17,
                         "startColumn": 4,
@@ -296,7 +296,7 @@
                     "endOffset": 1524
                 },
                 "from": {
-                    "file": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/bundles/debug/res/values/values.xml",
+                    "file": "E:\\Dokumente\\@Uni\\TU\\Sem4\\ProRe1u2\\companion-projekt\\basestation\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 18,
                         "startColumn": 4,
@@ -315,7 +315,7 @@
                     "endOffset": 1571
                 },
                 "from": {
-                    "file": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/bundles/debug/res/values/values.xml",
+                    "file": "E:\\Dokumente\\@Uni\\TU\\Sem4\\ProRe1u2\\companion-projekt\\basestation\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 19,
                         "startColumn": 4,
@@ -334,7 +334,7 @@
                     "endOffset": 1624
                 },
                 "from": {
-                    "file": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/bundles/debug/res/values/values.xml",
+                    "file": "E:\\Dokumente\\@Uni\\TU\\Sem4\\ProRe1u2\\companion-projekt\\basestation\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 20,
                         "startColumn": 4,
@@ -353,7 +353,7 @@
                     "endOffset": 1674
                 },
                 "from": {
-                    "file": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/bundles/debug/res/values/values.xml",
+                    "file": "E:\\Dokumente\\@Uni\\TU\\Sem4\\ProRe1u2\\companion-projekt\\basestation\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 21,
                         "startColumn": 4,
@@ -372,7 +372,7 @@
                     "endOffset": 1736
                 },
                 "from": {
-                    "file": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/bundles/debug/res/values/values.xml",
+                    "file": "E:\\Dokumente\\@Uni\\TU\\Sem4\\ProRe1u2\\companion-projekt\\basestation\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 22,
                         "startColumn": 4,
@@ -392,7 +392,7 @@
                     "endOffset": 1896
                 },
                 "from": {
-                    "file": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/bundles/debug/res/values/values.xml",
+                    "file": "E:\\Dokumente\\@Uni\\TU\\Sem4\\ProRe1u2\\companion-projekt\\basestation\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 23,
                         "startColumn": 4,
@@ -412,7 +412,7 @@
                     "endOffset": 1929
                 },
                 "from": {
-                    "file": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/bundles/debug/res/values/values.xml",
+                    "file": "E:\\Dokumente\\@Uni\\TU\\Sem4\\ProRe1u2\\companion-projekt\\basestation\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 26,
                         "startColumn": 4,
@@ -432,7 +432,7 @@
                     "endOffset": 2108
                 },
                 "from": {
-                    "file": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/bundles/debug/res/values/values.xml",
+                    "file": "E:\\Dokumente\\@Uni\\TU\\Sem4\\ProRe1u2\\companion-projekt\\basestation\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 27,
                         "startColumn": 4,
@@ -453,7 +453,7 @@
                     "endOffset": 2392
                 },
                 "from": {
-                    "file": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/bundles/debug/res/values/values.xml",
+                    "file": "E:\\Dokumente\\@Uni\\TU\\Sem4\\ProRe1u2\\companion-projekt\\basestation\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 31,
                         "startColumn": 4,
@@ -474,7 +474,7 @@
                     "endOffset": 2549
                 },
                 "from": {
-                    "file": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/bundles/debug/res/values/values.xml",
+                    "file": "E:\\Dokumente\\@Uni\\TU\\Sem4\\ProRe1u2\\companion-projekt\\basestation\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 37,
                         "startColumn": 4,

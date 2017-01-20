@@ -30,6 +30,15 @@
             android:name=".ListReminders"
             android:label="@string/title_activity_list_reminders"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".Fluid"
+            android:label="Fluid"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".Steps"
+            android:label="Steps"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+
     </application>
 
 </manifest>

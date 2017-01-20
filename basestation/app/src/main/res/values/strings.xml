@@ -7,4 +7,7 @@
     <string name="activity_daily_goals1">Sport</string>
     <string name="title_activity_http_handler">HttpHandlerActivity</string>
     <string name="title_activity_list_reminders">ListReminders</string>
+
+    <string name="buttonWeek">Woche</string>
+    <string name="buttonYear">Jahr</string>
 </resources>

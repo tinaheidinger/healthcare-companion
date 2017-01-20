@@ -37,6 +37,12 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         ImageButton reminder = (ImageButton) findViewById(R.id.reminderButton);
         reminder.setOnClickListener(this);
 
+        ImageButton fluid = (ImageButton) findViewById(R.id.fluidButton);
+        fluid.setOnClickListener(this);
+
+        ImageButton steps = (ImageButton) findViewById(R.id.walkButton);
+        steps.setOnClickListener(this);
+
     }
 
     @Override
@@ -49,6 +55,14 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
            case R.id.reminderButton:
                Intent intent2 = new Intent(view.getContext(), ListReminders.class);
                startActivityForResult(intent2, 0);
+               break;
+           case R.id.fluidButton:
+               Intent intent3 = new Intent(view.getContext(), Fluid.class);
+               startActivityForResult(intent3, 0);
+               break;
+           case R.id.walkButton:
+               Intent intent4 = new Intent(view.getContext(), Steps.class);
+               startActivityForResult(intent4, 0);
                break;
        }
     }
