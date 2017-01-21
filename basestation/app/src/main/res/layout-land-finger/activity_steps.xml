@@ -21,7 +21,7 @@
         android:layout_marginTop="22dp" />
 
     <Button
-        android:text="@string/buttonYear"
+        android:text="@string/buttonMonth"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/graph"

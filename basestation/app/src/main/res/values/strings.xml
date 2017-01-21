@@ -9,5 +9,7 @@
     <string name="title_activity_list_reminders">ListReminders</string>
 
     <string name="buttonWeek">Woche</string>
-    <string name="buttonYear">Jahr</string>
+    <string name="buttonMonth">Monat</string>
+    <string name="waterText">ml hinzufügen</string>
+    <string name="errorWeek">Not a valid Weekday</string>
 </resources>
