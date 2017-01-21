@@ -28,6 +28,7 @@ import com.stacktips.view.utils.CalendarUtils;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.DateUtils;
@@ -292,7 +293,7 @@ public class CreateDailyGoal extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            Toast.makeText(getBaseContext(), "Neues Ziel gespeichert. \n Sollte es noch nicht angezeigt werden, hinunter scrollen.  ", Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(), "Neues Ziel gespeichert. \n Sollte es noch nicht angezeigt werden, bitte etwas hinunter scrollen.  ", Toast.LENGTH_LONG).show();
         }
     }
 

@@ -1,7 +1,9 @@
 package com.example.maria.basestationapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.Image;
 import android.net.ConnectivityManager;
@@ -25,6 +27,7 @@ import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -54,7 +57,9 @@ public class DailyGoals extends Activity {
     private static ArrayList<Goal> listGoals = new ArrayList<Goal>();
 
     private Button menu;
-    private ImageButton delete;
+
+    private static Goal delete;
+
 
     /* method starts when activity is called
     * views and data is requested and loaded to display
@@ -108,15 +113,40 @@ public class DailyGoals extends Activity {
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, final View view,
-                                    int position, long id) {
+            public void onItemClick(final AdapterView<?> parent, final View view,
+                                    final int position, long id) {
 
-                    final Goal goal = (Goal) parent.getItemAtPosition(position);
-                    String temp[] = new String[]{goal.emoji, goal.name, ""+goal.id};
-                    Intent intent = new Intent(DailyGoals.this, CreateDailyGoal.class);
-                    intent.putExtra("goal", temp);
+                final AlertDialog.Builder builder = new AlertDialog.Builder(DailyGoals.this);
+                builder.setMessage("Tagesziel löschen oder bearbeiten?");
 
-                    startActivity(intent);
+                builder.setPositiveButton("Bearbeiten", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        final Goal goal = (Goal) parent.getItemAtPosition(position);
+                        String temp[] = new String[]{goal.emoji, goal.name, ""+goal.id};
+                        Intent intent = new Intent(DailyGoals.this, CreateDailyGoal.class);
+                        intent.putExtra("goal", temp);
+
+                        startActivity(intent);
+                    }
+                });
+
+                builder.setNegativeButton("Löschen", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        delete = (Goal) parent.getItemAtPosition(position);
+                        new DailyGoals.HttpAsyncTaskDelete().execute("http://139.59.158.39:8080/goal");
+
+                        Intent intent = new Intent(DailyGoals.this, DailyGoals.class);
+                        startActivity(intent);
+                    }
+                });
+
+                builder.setNeutralButton("Abbrechen", new DialogInterface.OnClickListener()     {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
 
             }
 
@@ -340,6 +370,51 @@ public class DailyGoals extends Activity {
 
 
         Log.d(TAG, "Server response..." + result);
+        return result;
+    }
+
+    private class HttpAsyncTaskDelete extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... urls) {
+            String deleteString = DELETE(urls[0]);
+
+            Log.d(TAG, deleteString.toString());
+            return "ok";
+        }
+       /* // onPostExecute displays the results of the AsyncTask.
+        @Override
+        protected void onPostExecute(String result) {
+            Toast.makeText(getBaseContext(), "Data Sent!", Toast.LENGTH_LONG).show();
+        }*/
+    }
+
+    public static String DELETE(String url){
+        Log.d(TAG, "DELETE Method started");
+
+
+        InputStream inputStream = null;
+        String result = "";
+
+        HttpClient httpclient = new DefaultHttpClient();
+        HttpDelete httpdelete = new HttpDelete(url+"/"+delete.id);
+
+        HttpResponse response = null;
+        try {
+            response = httpclient.execute(httpdelete);
+            inputStream = response.getEntity().getContent();
+
+            if(inputStream != null) {
+                result = convertInputStreamToString(inputStream);
+                Log.d(TAG, "answer of server... \n"+result);
+            }
+            else {
+                result = "Did not work!";
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return result;
     }
 
