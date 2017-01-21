@@ -48,6 +48,7 @@ public class ListReminders extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        new ListReminders.HttpAsyncTaskGET().execute("http://139.59.158.39:8080/reminders");
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_reminders);
@@ -62,8 +63,14 @@ public class ListReminders extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        loadEntries();
+        try {
+            Thread.sleep(1000);
+            loadEntries();
+        } catch (InterruptedException e) {
+            Log.e(TAG,e.toString());
+            Intent intent = new Intent(ListReminders.this, MainActivity.class);
+            startActivity(intent);
+        }
     }
 
     protected void loadEntries() {

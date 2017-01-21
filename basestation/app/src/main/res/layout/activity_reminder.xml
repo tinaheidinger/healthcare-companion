@@ -35,7 +35,8 @@
                 android:id="@+id/backBtnReminder"
                 android:layout_gravity="left"
                 android:layout_marginLeft="50dp"
-                android:layout_marginRight="0dp"/>
+                android:layout_marginRight="0dp"
+                android:background="@drawable/edittextstyle"/>
 
             <TextView
                 android:text="Woran möchtest du \n erinnert werden?"
@@ -52,7 +53,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/textViewReminder"
                 android:id="@+id/furtherBtnReminder"
-                android:layout_gravity="right" />
+                android:layout_gravity="right"
+                android:background="@drawable/edittextstyle"/>
         </LinearLayout>
 
         <LinearLayout

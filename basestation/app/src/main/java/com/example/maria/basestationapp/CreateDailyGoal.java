@@ -187,10 +187,12 @@ public class CreateDailyGoal extends AppCompatActivity {
         furtherButton = (Button) findViewById(R.id.furtherButton);
         furtherButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                name = editText.getText().toString();
+                //name = editText.getText().toString();
                 emoji = EmojiMap.replaceUnicodeEmojis(editEmoji.getText().toString());
 
                 post = new Goal(emoji, name);
+                Log.d(TAG, "post: "+name);
+
                 new HttpAsyncTaskPOST().execute("http://139.59.158.39:8080/goal");
 
                 Intent intent = new Intent(CreateDailyGoal.this, DailyGoals.class);
@@ -290,7 +292,7 @@ public class CreateDailyGoal extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            Toast.makeText(getBaseContext(), "Neues Ziel gespeichert. Wird in einigen Augenblicken in die Liste übernommen. ", Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(), "Neues Ziel gespeichert. \n Sollte es noch nicht angezeigt werden, hinunter scrollen.  ", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -302,6 +304,7 @@ public class CreateDailyGoal extends AppCompatActivity {
      * */
     public static String POST(String url){
         Log.d(TAG,"Post Method started");
+        Log.d(TAG, post.emoji+" "+post.name);
 
         InputStream inputStream = null;
         String result = "";

@@ -24,11 +24,6 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        View decorView = getWindow().getDecorView();
-        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_FULLSCREEN;
-        decorView.setSystemUiVisibility(uiOptions);
-
         setContentView(R.layout.activity_main);
 
         ImageButton goal = (ImageButton) findViewById(R.id.goalButton);

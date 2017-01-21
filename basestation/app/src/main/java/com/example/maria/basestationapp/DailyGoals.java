@@ -3,11 +3,13 @@ package com.example.maria.basestationapp;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +18,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -50,6 +54,7 @@ public class DailyGoals extends Activity {
     private static ArrayList<Goal> listGoals = new ArrayList<Goal>();
 
     private Button menu;
+    private ImageButton delete;
 
     /* method starts when activity is called
     * views and data is requested and loaded to display
@@ -72,11 +77,14 @@ public class DailyGoals extends Activity {
         } else {
             Log.d(TAG, "not connected");
         }
+
         try {
             Thread.sleep(1000);
             refresh();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Log.e(TAG,e.toString());
+            Intent intent = new Intent(DailyGoals.this, MainActivity.class);
+            startActivity(intent);
         }
 
         menu = (Button) findViewById(R.id.backButtonGoal);
@@ -102,18 +110,20 @@ public class DailyGoals extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
-                final Goal goal = (Goal) parent.getItemAtPosition(position);
-                String temp[] = new String[]{goal.emoji, goal.name, goal.emoji};
-                Intent intent = new Intent(DailyGoals.this, CreateDailyGoal.class);
-                intent.putExtra("goal", temp);
 
-                startActivity(intent);
+                    final Goal goal = (Goal) parent.getItemAtPosition(position);
+                    String temp[] = new String[]{goal.emoji, goal.name, ""+goal.id};
+                    Intent intent = new Intent(DailyGoals.this, CreateDailyGoal.class);
+                    intent.putExtra("goal", temp);
+
+                    startActivity(intent);
 
             }
 
         });
 
         FloatingActionButton myFab = (FloatingActionButton) this.findViewById(R.id.addGoal);
+        myFab.setRippleColor(getResources().getColor(R.color.green));
         myFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -305,16 +315,18 @@ public class DailyGoals extends Activity {
 
 
             if (jsonArray.length() > 0) {
+                int id;
                 String emoji = "";
                 String emojimap = "";
                 String text = "";
                 Goal goal;
                 for (int i = 0; i < jsonArray.length(); i++) {
                     jsonObject = jsonArray.getJSONObject(i);
+                    id= jsonObject.getInt("id");
                     emoji = jsonObject.getString("emoji");
                     text = jsonObject.getString("text");
                     emojimap = EmojiMap.replaceCheatSheetEmojis(emoji);
-                    goal = new Goal(emojimap, text);
+                    goal = new Goal(id,emojimap, text);
                     Log.d(TAG, goal.toString());
                     result.add(goal);
                 }

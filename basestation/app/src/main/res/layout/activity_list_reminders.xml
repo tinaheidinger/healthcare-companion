@@ -44,8 +44,8 @@
             android:orientation="vertical">
 
             <ListView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="490dp"
+                android:layout_height="353dp"
                 android:id="@+id/reminderlistView"
                 android:layout_marginBottom="120dp"
                 android:layout_marginTop="100dp"
@@ -60,10 +60,11 @@
         android:layout_width="148dp"
         android:layout_height="76dp"
         android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
         app:srcCompat="@android:drawable/ic_menu_add"
-        app:backgroundTint="?attr/actionMenuTextColor"
-        app:rippleColor="@android:color/background_light" />
+        app:backgroundTint="@color/green"
+        app:rippleColor="@color/green" />
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
