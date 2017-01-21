@@ -12,31 +12,43 @@
         android:background="@drawable/buttons"
         android:text="Menü" />
 
+    <Button
+        android:text="Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="55dp"
+        android:id="@+id/button"
+        android:visibility="invisible" />
+
     <com.jjoe64.graphview.GraphView
         android:layout_width="match_parent"
         android:layout_height="200dip"
         android:id="@+id/graph"
+        android:layout_marginTop="68dp"
         android:layout_below="@+id/backButtonSteps"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="22dp" />
+        android:layout_alignStart="@+id/backButtonSteps"
+        android:layout_alignEnd="@+id/button" />
 
     <Button
         android:text="@string/buttonMonth"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="109dp"
+        android:layout_marginTop="18dp"
+        android:id="@+id/monthSteps"
         android:layout_below="@+id/graph"
-        android:layout_alignStart="@+id/backButtonSteps"
-        android:layout_marginStart="72dp"
-        android:layout_marginTop="20dp"
-        android:id="@+id/yearSteps" />
+        android:layout_toEndOf="@+id/backButtonSteps" />
 
     <Button
-        android:text="Button"
+        android:text="@string/buttonWeek"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/yearSteps"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="125dp"
-        android:id="@+id/weekSteps" />
+        android:layout_marginEnd="117dp"
+        android:id="@+id/weekSteps"
+        android:layout_alignBaseline="@+id/monthSteps"
+        android:layout_alignBottom="@+id/monthSteps"
+        android:layout_toStartOf="@+id/button" />
 
 </RelativeLayout>
