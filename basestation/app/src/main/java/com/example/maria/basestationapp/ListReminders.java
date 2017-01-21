@@ -1,7 +1,9 @@
 package com.example.maria.basestationapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -24,6 +26,7 @@ import android.widget.TextView;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
@@ -31,7 +34,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +50,8 @@ public class ListReminders extends AppCompatActivity {
     private static ArrayList<Reminder> listReminders = new ArrayList<Reminder>();
 
     private Button menu;
+
+    private static Reminder delete;
 
 
     @Override
@@ -83,15 +91,43 @@ public class ListReminders extends AppCompatActivity {
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, final View view,
-                                    int position, long id) {
-                final Reminder r = (Reminder) parent.getItemAtPosition(position);
-                String temp[] = new String[]{r.name, r.emoji};
-                Intent intent = new Intent(ListReminders.this, CreateReminder.class);
-                intent.putExtra("reminder", temp);
-                intent.putExtra("reminder_date", r.date_time);
+            public void onItemClick(final AdapterView<?> parent, final View view,
+                                    final int position, long id) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(ListReminders.this);
+                builder.setMessage("Erinnerung bearbeiten oder löschen?");
 
-                startActivity(intent);
+                builder.setPositiveButton("Bearbeiten", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        final Reminder r = (Reminder) parent.getItemAtPosition(position);
+                        String temp[] = new String[]{r.name, r.emoji};
+                        Intent intent = new Intent(ListReminders.this, CreateReminder.class);
+                        intent.putExtra("reminder", temp);
+                        intent.putExtra("reminder_date_time", r.date_time);
+                        intent.putExtra("day", r.day);
+                        intent.putExtra("date", r.date);
+
+                        startActivity(intent);
+                    }
+                });
+
+                builder.setNegativeButton("Löschen", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        delete = (Reminder) parent.getItemAtPosition(position);
+                        Log.d(TAG,"delet id:" +delete.id);
+                        new ListReminders.HttpAsyncTaskDelete().execute("http://139.59.158.39:8080/reminder");
+
+                        Intent intent = new Intent(ListReminders.this, ListReminders.class);
+                        startActivity(intent);
+                    }
+                });
+
+                builder.setNeutralButton("Abbrechen", new DialogInterface.OnClickListener()     {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
 
             }
 
@@ -154,17 +190,26 @@ public class ListReminders extends AppCompatActivity {
 
 
             if (jsonArray.length() > 0) {
+                int id;
                 String emoji = "";
                 String emojimap = "";
                 String text = "";
+                String date="";
+                String day="";
                 Reminder reminder;
+
                 for (int i = 0; i < jsonArray.length(); i++) {
                     jsonObject = jsonArray.getJSONObject(i);
+                    id = jsonObject.getInt("id");
                     emoji = jsonObject.getString("emoji");
                     text = jsonObject.getString("text");
                     emojimap = EmojiMap.replaceCheatSheetEmojis(emoji);
-                    reminder = new Reminder(emojimap, text);
-                    Log.d(TAG, reminder.toString());
+                    date = jsonObject.getString("date");
+                    day = jsonObject.getString("weekday");
+
+                    reminder = new Reminder(id,emojimap, text,day);
+                    reminder.setDate(date);
+                    Log.d(TAG, "Reminder von Server: id"+reminder.id);
                     result.add(reminder);
                 }
             }
@@ -191,6 +236,51 @@ public class ListReminders extends AppCompatActivity {
         } else {
             return false;
         }
+    }
+
+    private class HttpAsyncTaskDelete extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... urls) {
+            String deleteString = DELETE(urls[0]);
+
+            Log.d(TAG, deleteString.toString());
+            return "ok";
+        }
+       /* // onPostExecute displays the results of the AsyncTask.
+        @Override
+        protected void onPostExecute(String result) {
+            Toast.makeText(getBaseContext(), "Data Sent!", Toast.LENGTH_LONG).show();
+        }*/
+    }
+
+    public static String DELETE(String url){
+        Log.d(TAG, "DELETE Method started");
+
+
+        InputStream inputStream = null;
+        String result = "";
+
+        HttpClient httpclient = new DefaultHttpClient();
+        HttpDelete httpdelete = new HttpDelete(url+"/"+delete.id);
+
+        HttpResponse response = null;
+        try {
+            response = httpclient.execute(httpdelete);
+            inputStream = response.getEntity().getContent();
+
+            if(inputStream != null) {
+                result = convertInputStreamToString(inputStream);
+                Log.d(TAG, "answer of server... \n"+result);
+            }
+            else {
+                result = "Did not work!";
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 
     public void addReminder(Reminder r){
@@ -221,12 +311,27 @@ public class ListReminders extends AppCompatActivity {
             return convertView;
         }
 
-
         @Override
         public boolean hasStableIds() {
             return true;
         }
 
     }
+
+    private static String convertInputStreamToString(InputStream inputStream) throws IOException {
+        Log.d(TAG, "prepare bufferedreader");
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        Log.d(TAG, "BR ok");
+
+        String line = "";
+        String result = "";
+        while ((line = bufferedReader.readLine()) != null)
+            result += line;
+
+        inputStream.close();
+        return result;
+
+    }
+
 
 }

@@ -45,6 +45,8 @@ public class CreateReminder extends AppCompatActivity implements View.OnClickLis
     private static String name = "";
     private static String emoji = "";
     private static int[] date_time;
+    private static String dayOfReminder="";
+    private static String date="";
 
     private EditText editText, editEmoji, editDate, editTime;
     private Button furtherButton_text, furtherButton_picker;
@@ -107,6 +109,8 @@ public class CreateReminder extends AppCompatActivity implements View.OnClickLis
                 hour = date_time[3];
                 minute = date_time[4];
             }
+
+            date = intent.getStringExtra("date");
         }
 
     }
@@ -132,9 +136,51 @@ public class CreateReminder extends AppCompatActivity implements View.OnClickLis
         editTime = (EditText) findViewById(R.id.in_time);
         editTime.setOnFocusChangeListener(this);
 
+        if(date!=null){
+            editDate.setText(date);
+        }
+
         radioGroup = (RadioGroup) findViewById(R.id.radiogroup);
-        RadioButton temp = (RadioButton) findViewById(R.id.norepeat);
-        temp.setChecked(true);
+        dayOfReminder = getIntent().getStringExtra("day");
+        if(dayOfReminder!=null){
+            switch (dayOfReminder){
+                case "Montag":
+                    radioDay = (RadioButton) findViewById(R.id.mo);
+                    radioDay.setChecked(true);
+                    break;
+                case "Dienstag":
+                    radioDay = (RadioButton) findViewById(R.id.di);
+                    radioDay.setChecked(true);
+                    break;
+                case "Mittwoch":
+                    radioDay = (RadioButton) findViewById(R.id.mi);
+                    radioDay.setChecked(true);
+                    break;
+                case "Donnerstag":
+                    radioDay = (RadioButton) findViewById(R.id.don);
+                    radioDay.setChecked(true);
+                    break;
+                case "Freitag":
+                    radioDay = (RadioButton) findViewById(R.id.fr);
+                    radioDay.setChecked(true);
+                    break;
+                case "Samstag":
+                    radioDay = (RadioButton) findViewById(R.id.sa);
+                    radioDay.setChecked(true);
+                    break;
+                case "Sonntag":
+                    radioDay = (RadioButton) findViewById(R.id.so);
+                    radioDay.setChecked(true);
+                    break;
+                case "nicht wiederholen":
+                    radioDay = (RadioButton) findViewById(R.id.norepeat);
+                    radioDay.setChecked(true);
+                    break;
+            }
+        }else {
+            radioDay = (RadioButton) findViewById(R.id.norepeat);
+            radioDay.setChecked(true);
+        }
 
     }
 
@@ -219,14 +265,18 @@ public class CreateReminder extends AppCompatActivity implements View.OnClickLis
 
         }else if (v == furtherButton_picker) {
             if (name.length() > 0 && editDate.getText().length() > 0) {
-                Reminder reminder = new Reminder(emoji, name, date_time);
+
+                radioDay = (RadioButton) findViewById(radioGroup.getCheckedRadioButtonId());
+                dayOfReminder= radioDay.getText().toString();
+
+                Log.d(TAG, "gewählter radioButton: "+dayOfReminder);
+
                 Intent intent = new Intent(CreateReminder.this, CreateReminder.class);
                 intent.putExtra("emoji", emoji);
                 intent.putExtra("name", name);
-                intent.putExtra("date", date_time);
+                intent.putExtra("date", editDate.getText());
+                intent.putExtra("weekday", dayOfReminder);
 
-                Log.d(TAG, emoji+" n: "+name+" datum: "+date_time[0]+","+date_time[1]+","+date_time[2]+" zeit:"+
-                        date_time[3]+":"+date_time[4]);
                 new CreateReminder.HttpAsyncTaskPOST().execute("http://139.59.158.39:8080/reminder");
 
                 Toast.makeText(getApplicationContext(),
@@ -237,7 +287,7 @@ public class CreateReminder extends AppCompatActivity implements View.OnClickLis
 
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage("Trag bitte einen Titel und die gewünschte Zeit ein!").setTitle("Info");
+                builder.setMessage("Trag bitte einen Titel und das gewünschte Datum ein!").setTitle("Info");
                 builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
 
@@ -279,7 +329,12 @@ public class CreateReminder extends AppCompatActivity implements View.OnClickLis
             jsonObject.accumulate("companion", 3);
             jsonObject.accumulate("emoji", emoji);
             jsonObject.accumulate("text", name);
-            jsonObject.accumulate("date", date_time[0]+"-"+date_time[1]+"-"+date_time[2]);
+            if(date_time!=null) {
+                jsonObject.accumulate("date", date_time[0] + "-" + date_time[1] + "-" + date_time[2]);
+            }else{
+                jsonObject.accumulate("date", date);
+            }
+            jsonObject.accumulate("weekday", dayOfReminder);
 
             json = jsonObject.toString();
 

@@ -140,7 +140,7 @@ public class DailyGoals extends Activity {
                     }
                 });
 
-                builder.setNeutralButton("Abbrechen", new DialogInterface.OnClickListener()     {
+                builder.setNeutralButton("Zurück", new DialogInterface.OnClickListener()     {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }

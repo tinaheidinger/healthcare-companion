@@ -6,21 +6,25 @@ package com.example.maria.basestationapp;
 
 public class Reminder {
 
+    public int id;
     public String emoji;
     public String name;
     public int[] date_time;
+    public String date;
     public String day;
 
-    public Reminder(String emoji, String name, int[] date_time){
+    public Reminder(int id, String emoji, String name, int[] date_time){
+        this.id=id;
         this.emoji=emoji;
         this.name=name;
         this.date_time=date_time;
     }
 
-    public Reminder(String emoji, String name){
+    public Reminder(int id, String emoji, String name, String day){
+        this.id=id;
         this.emoji=emoji;
         this.name=name;
-        this.date_time=new int[5];
+        this.day=day;
     }
 
     public void setDate_time(int year, int month, int day, int hour, int minute){
@@ -30,6 +34,8 @@ public class Reminder {
     public void setDay(String day){
         this.day=day;
     }
+
+    public void setDate(String date){this.date=date;}
 
     public String toString(){
         return emoji+" "+name+" "+date_time;
