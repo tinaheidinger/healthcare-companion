@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.transition.Visibility;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -96,7 +97,32 @@ public class ListReminders extends AppCompatActivity {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(ListReminders.this);
                 builder.setMessage("Erinnerung bearbeiten oder löschen?");
 
-                builder.setPositiveButton("Bearbeiten", new DialogInterface.OnClickListener() {
+                builder.setNeutralButton("Löschen", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        delete = (Reminder) parent.getItemAtPosition(position);
+                        Log.d(TAG,"delet id:" +delete.id);
+
+                        final AlertDialog.Builder builderDelete = new AlertDialog.Builder(ListReminders.this);
+                        builderDelete.setMessage("Wirklich löschen?");
+                        builderDelete.setNegativeButton("Ja", new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int id) {
+                                new ListReminders.HttpAsyncTaskDelete().execute("http://139.59.158.39:8080/reminder");
+
+                                Intent intent = new Intent(ListReminders.this, ListReminders.class);
+                                startActivity(intent);
+                            }
+                        });
+                        builderDelete.setPositiveButton("Nein", new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }});
+
+                        AlertDialog deleteDialog = builderDelete.create();
+                        deleteDialog.show();
+                    }
+                });
+
+                builder.setNegativeButton("Bearbeiten", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         final Reminder r = (Reminder) parent.getItemAtPosition(position);
                         String temp[] = new String[]{r.name, r.emoji};
@@ -110,18 +136,7 @@ public class ListReminders extends AppCompatActivity {
                     }
                 });
 
-                builder.setNegativeButton("Löschen", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        delete = (Reminder) parent.getItemAtPosition(position);
-                        Log.d(TAG,"delet id:" +delete.id);
-                        new ListReminders.HttpAsyncTaskDelete().execute("http://139.59.158.39:8080/reminder");
-
-                        Intent intent = new Intent(ListReminders.this, ListReminders.class);
-                        startActivity(intent);
-                    }
-                });
-
-                builder.setNeutralButton("Abbrechen", new DialogInterface.OnClickListener()     {
+                builder.setPositiveButton("Abbrechen", new DialogInterface.OnClickListener()     {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }

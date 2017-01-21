@@ -119,7 +119,7 @@ public class DailyGoals extends Activity {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(DailyGoals.this);
                 builder.setMessage("Tagesziel löschen oder bearbeiten?");
 
-                builder.setPositiveButton("Bearbeiten", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton("Bearbeiten", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         final Goal goal = (Goal) parent.getItemAtPosition(position);
                         String temp[] = new String[]{goal.emoji, goal.name, ""+goal.id};
@@ -130,17 +130,31 @@ public class DailyGoals extends Activity {
                     }
                 });
 
-                builder.setNegativeButton("Löschen", new DialogInterface.OnClickListener() {
+                builder.setNeutralButton("Löschen", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        delete = (Goal) parent.getItemAtPosition(position);
-                        new DailyGoals.HttpAsyncTaskDelete().execute("http://139.59.158.39:8080/goal");
 
-                        Intent intent = new Intent(DailyGoals.this, DailyGoals.class);
-                        startActivity(intent);
+                        final AlertDialog.Builder builderDelete = new AlertDialog.Builder(DailyGoals.this);
+                        builderDelete.setMessage("Wirklich löschen?");
+                        builderDelete.setNegativeButton("Ja", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                delete = (Goal) parent.getItemAtPosition(position);
+                                new DailyGoals.HttpAsyncTaskDelete().execute("http://139.59.158.39:8080/goal");
+
+                                Intent intent = new Intent(DailyGoals.this, DailyGoals.class);
+                                startActivity(intent);
+                            }
+                        });
+                        builderDelete.setPositiveButton("Nein", new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }});
+
+                        AlertDialog deleteDialog = builderDelete.create();
+                        deleteDialog.show();
                     }
                 });
 
-                builder.setNeutralButton("Zurück", new DialogInterface.OnClickListener()     {
+                builder.setPositiveButton("Abbrechen", new DialogInterface.OnClickListener()     {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }
