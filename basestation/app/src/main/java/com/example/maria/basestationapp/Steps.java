@@ -35,7 +35,6 @@ import static com.example.maria.basestationapp.R.id.loadTextSteps;
 import static com.example.maria.basestationapp.R.id.monthSteps;
 import static com.example.maria.basestationapp.R.id.weekSteps;
 
-
 /**
  * Created by Marie on 20.01.2017.
  */
@@ -49,7 +48,6 @@ public class Steps extends AppCompatActivity {
     private static final String TAG = "StepsScreen";
 
     private int[] stepsWeek = new int[7];
- //   private int[] stepsMonth = new int[31];
 
     public static ArrayList<Integer> stepsMonth;
     public int dayStepsAmount;
@@ -88,16 +86,7 @@ public class Steps extends AppCompatActivity {
         graph = (GraphView) findViewById(R.id.graph);
         GridLabelRenderer glr = graph.getGridLabelRenderer();
         glr.setPadding(50);
-        seriesWeek = new LineGraphSeries<>(new DataPoint[] {
-                new DataPoint(0, stepsWeek[0]),
-                new DataPoint(1, stepsWeek[1]),
-                new DataPoint(2, stepsWeek[2]),
-                new DataPoint(3, stepsWeek[3]),
-                new DataPoint(4, stepsWeek[4]),
-                new DataPoint(5, stepsWeek[5]),
-                new DataPoint(6, stepsWeek[6])
-        });
-        graph.addSeries(seriesWeek);
+
         StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
         staticLabelsFormatter.setHorizontalLabels(new String[]{"Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"});
         graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
@@ -126,34 +115,6 @@ public class Steps extends AppCompatActivity {
         });
     }
 
-    public void checkDayOfWeek(){
-        switch(now.get(Calendar.DAY_OF_WEEK)){
-            case(Calendar.MONDAY):
-                stepsWeek[0] = dayStepsAmount;
-                break;
-            case(Calendar.TUESDAY):
-                stepsWeek[1] = dayStepsAmount;
-                break;
-            case(Calendar.WEDNESDAY):
-                stepsWeek[2] = dayStepsAmount;
-                break;
-            case(Calendar.THURSDAY):
-                stepsWeek[3] = dayStepsAmount;
-                break;
-            case(Calendar.FRIDAY):
-                stepsWeek[4] = dayStepsAmount;
-                break;
-            case(Calendar.SATURDAY):
-                stepsWeek[5] = dayStepsAmount;
-                break;
-            case(Calendar.SUNDAY):
-                stepsWeek[6] = dayStepsAmount;
-                break;
-            default:
-                break;
-        }
-    }
-
     public void changeToMonthView(){
         DataPoint[] datapoints = new DataPoint[31];
 
@@ -168,7 +129,6 @@ public class Steps extends AppCompatActivity {
         StaticLabelsFormatter staticLabelsFormatterMonth = new StaticLabelsFormatter(graph);
         staticLabelsFormatterMonth.setHorizontalLabels(monthXAxis);
         graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatterMonth);
-
     }
 
     public void changeToWeekView(){
@@ -179,14 +139,13 @@ public class Steps extends AppCompatActivity {
         if (today < 7) {
             today = 7;
         }
-
-        Log.d(TAG, "today:" + today.toString());
+        //Log.d(TAG, "today:" + today.toString());
 
         String[] labelX = new String[7];
         Integer dataPointIdx=6;
         for (Integer i=today-1; i>=today-7; i--) {
             datapoints[dataPointIdx] = new DataPoint(dataPointIdx, dayAmountArray[i]);
-            Log.d(TAG, "dataPointIdx:" + dataPointIdx.toString() + " i: "+i.toString() + " amount:"+dayAmountArray[i]);
+            //Log.d(TAG, "dataPointIdx:" + dataPointIdx.toString() + " i: "+i.toString() + " amount:"+dayAmountArray[i]);
             labelX[dataPointIdx] = Integer.toString((i+1));
 
             dataPointIdx--;
@@ -195,62 +154,14 @@ public class Steps extends AppCompatActivity {
         graph.addSeries(seriesWeek);
 
         StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
-        //staticLabelsFormatter.setHorizontalLabels(new String[]{"Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"});
         staticLabelsFormatter.setHorizontalLabels(labelX);
         graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
-
-
-    }
-/*
-    public void changeToMonthView(){
-        DataPoint[] datapoints = new DataPoint[31];
-
-        graph.removeAllSeries();
-
-        for (int i=0; i<31; i++) {
-            datapoints[i] = new DataPoint(i, stepsMonth[i]);
-        }
-        seriesMonth = new LineGraphSeries<>(datapoints);
-        graph.addSeries(seriesMonth);
-
-        StaticLabelsFormatter staticLabelsFormatterMonth = new StaticLabelsFormatter(graph);
-        staticLabelsFormatterMonth.setHorizontalLabels(monthXAxis);
-        graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatterMonth);
     }
 
-    public void changeToWeekView(){
-        graph.removeAllSeries();
 
-        seriesWeek = new LineGraphSeries<>(new DataPoint[] {
-                new DataPoint(0, stepsWeek[0]),
-                new DataPoint(1, stepsWeek[1]),
-                new DataPoint(2, stepsWeek[2]),
-                new DataPoint(3, stepsWeek[3]),
-                new DataPoint(4, stepsWeek[4]),
-                new DataPoint(5, stepsWeek[5]),
-                new DataPoint(6, stepsWeek[6])
-        });
+    //////////SERVERKOMMUNIKATION////////////
 
-        graph.addSeries(seriesWeek);
 
-        StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
-        staticLabelsFormatter.setHorizontalLabels(new String[]{"Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"});
-        graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
-    }
-
-    public void onMonthPressed(){
-        changeToMonthView();
-    }
-
-    public void onWeekPressed(){
-        changeToWeekView();
-    }
-
-    public void onBackPressed() {
-        super.onBackPressed();
-        this.finish();
-    }
-*/
     public boolean isConnected() {
         connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
         networkInfo = connMgr.getActiveNetworkInfo();
@@ -263,145 +174,6 @@ public class Steps extends AppCompatActivity {
             return false;
         }
     }
-
-    /*
-    public static int[] GET_Month(String url) {
-        Log.d(TAG, "GET Method started: connected" + networkInfo.toString());
-
-        HttpClient httpclient = new DefaultHttpClient();
-        HttpGet httpget = new HttpGet(url + "?companion=5&period=month");
-        //JSONArray jsonArray = new JSONArray();
-        JSONArray jsonArray = null;
-        JSONObject jsonObject = new JSONObject();
-        //ArrayList<Fluid> result = new ArrayList<Fluid>();
-        int[] tempData = new int[31];
-
-        try {
-            Log.d(TAG, "before execute:"+jsonObject.length());
-            System.setProperty("http.keepAlive", "false");
-            HttpResponse response = httpclient.execute(httpget);
-
-            Log.d(TAG, "after execute"+jsonObject.length());
-            String server_response = null;
-            server_response = EntityUtils.toString(response.getEntity());
-            jsonObject = new JSONObject(server_response);
-
-            //Log.d(TAG, "get halp to month");
-            if (jsonObject.length() > 0) {
-                //Log.d(TAG,"!!!" +jsonObject.toString());
-                /*
-                String emoji = "";
-                String emojimap = "";
-                String text = "";
-                Goal goal;
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    jsonObject = jsonArray.getJSONObject(i);
-                    emoji = jsonObject.getString("emoji");
-                    text = jsonObject.getString("text");
-                    emojimap = EmojiMap.replaceCheatSheetEmojis(emoji);
-                    goal = new Goal(emojimap, text);
-                    Log.d(TAG, goal.toString());
-                    result.add(goal);
-
-                }
-                //String dates = jsonObject.getString("steps");
-
-                //Log.d(TAG, dates);
-
-                /* TESTDATEN --> HIER ECHTE DATEN EINLESEN!
-
-                for (int i=0; i<31;i++) {
-                    tempData[i] = i*100;
-                }
-            }
-        } catch (IOException e) {
-            Log.e(TAG,"IOException GET"+ e.toString());
-        } catch (JSONException e) {
-            Log.e(TAG, "JSON Exception " + e.getMessage());
-        }
-        Log.d(TAG, "Server response..." + tempData);
-        return tempData;
-    }
-
-    public static int[] GET_Week(String url) {
-        Log.d(TAG, "GET_WeeK()");
-        Log.d(TAG, "GET Method started: connected" + networkInfo.toString());
-
-        HttpClient httpclient = new DefaultHttpClient();
-        HttpGet httpget = new HttpGet(url + "?companion=5&period=week");
-        JSONArray jsonArray = null;
-        JSONObject jsonObject = new JSONObject();
-        //ArrayList<Fluid> result = new ArrayList<Fluid>();
-        int[] tempData = new int[7];
-
-        try {
-            Log.d(TAG, "before execute:"+jsonObject.length());
-            System.setProperty("http.keepAlive", "false");
-            HttpResponse response = httpclient.execute(httpget);
-
-            Log.d(TAG, "after execute"+jsonObject.length());
-            String server_response = null;
-            server_response = EntityUtils.toString(response.getEntity());
-            jsonObject = new JSONObject(server_response);
-            //Log.d(TAG, "send halp to week");
-
-            if (jsonObject.length() > 0) {
-                //Log.d(TAG, "welp" +jsonObject.toString());
-                /*
-                String emoji = "";
-                String emojimap = "";
-                String text = "";
-                Goal goal;
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    jsonObject = jsonArray.getJSONObject(i);
-                    emoji = jsonObject.getString("emoji");
-                    text = jsonObject.getString("text");
-                    emojimap = EmojiMap.replaceCheatSheetEmojis(emoji);
-                    goal = new Goal(emojimap, text);
-                    Log.d(TAG, goal.toString());
-                    result.add(goal);
-
-                }*/
-
-
-                /* TESTDATEN --> HIER ECHTE DATEN EINLESEN!
-
-                tempData[0] = 900;
-                tempData[1] = 99;
-                tempData[2] = 199;
-                tempData[3] = 299;
-                tempData[4] = 399;
-                tempData[5] = 499;
-                tempData[6] = 799;
-            }
-        } catch (IOException e) {
-            Log.e(TAG,"IOException GET"+ e.toString());
-        } catch (JSONException e) {
-            Log.e(TAG, "JSON Exception " + e.getMessage());
-        }
-        Log.d(TAG, "Server response..." + tempData);
-        return tempData;
-    }
-
-    private class HttpAsyncTaskGET extends AsyncTask<String, Void, ArrayList<Steps>> {
-        @Override
-        protected ArrayList<Steps> doInBackground(String... urls) {
-            Log.d(TAG, "doIn Background: connected" + isConnected());
-
-
-            stepsMonth = GET_Month(urls[0]);
-            //
-            stepsWeek = GET_Week(urls[0]);
-
-            return listSteps;
-        }
-       /* // onPostExecute displays the results of the AsyncTask.
-        @Override
-        protected void onPostExecute(String result) {
-            Toast.makeText(getBaseContext(), "Data Sent!", Toast.LENGTH_LONG).show();
-        }
-    }
-    */
 
     public static ArrayList<Integer> GET_Month(String url) {
         Log.d(TAG, "GET Method started: connected" + networkInfo.toString());
@@ -420,12 +192,15 @@ public class Steps extends AppCompatActivity {
             Log.d(TAG, "after execute"+jsonObject.length());
             String server_response = null;
             server_response = EntityUtils.toString(response.getEntity());
+
             jsonObject = new JSONObject(server_response);
+            /*
             if (jsonObject.length() >0 ) {
                 Log.d(TAG, jsonObject.toString());
             } else {
                 Log.d(TAG, "Length 0");
             }
+            */
 
             JSONArray jsonArray = jsonObject.getJSONArray("steps");
             if (jsonArray.length() > 0)
@@ -437,9 +212,7 @@ public class Steps extends AppCompatActivity {
                 Integer year;
                 JSONObject stepsObject;
                 String[] parts;
-
-                //dataPoints = new DataPoint[31];
-                Log.d(TAG, jsonArray.toString());
+                //Log.d(TAG, jsonArray.toString());
 
                 for (int i=0; i<dayAmountArray.length; i++) {
                     dayAmountArray[i] = 0;
@@ -457,8 +230,6 @@ public class Steps extends AppCompatActivity {
                     //Log.d(TAG, "year: "+year.toString() + " month: "+month.toString() + " day: "+day.toString());
                     amount = stepsObject.getInt("amount");
                     //Log.d(TAG, amount.toString());
-
-                    // daten einfüllen
                     dayAmountArray[day-1] = amount;
                 }
 
@@ -480,23 +251,17 @@ public class Steps extends AppCompatActivity {
 
     private class HttpAsyncTaskGET extends AsyncTask<String, Void, ArrayList<Integer>> {
         @Override
-        //protected ArrayList<Integer> doInBackground(String... urls) {
         protected ArrayList<Integer> doInBackground(String... urls) {
             Log.d(TAG, "doIn Background: connected" + isConnected());
 
 
             stepsMonth = GET_Month(urls[0]);
-            //
-            //waterWeek = GET_Week(urls[0]);
 
-
-            //Log.d(TAG, listFluid.toString());
             return listSteps;
         }
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(ArrayList<Integer> result) {
-            //Toast.makeText(getBaseContext(), "Data Sent!", Toast.LENGTH_LONG).show();
 
             weekButton = (Button) findViewById(weekSteps);
             weekButton.setOnClickListener(new View.OnClickListener(){

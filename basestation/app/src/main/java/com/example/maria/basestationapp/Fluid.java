@@ -74,7 +74,8 @@ public class Fluid extends AppCompatActivity{
     private static Integer[] dayAmountArray = new Integer[31];
 
     SimpleDateFormat sdf = new SimpleDateFormat("dd");
-    private Integer today = Integer.parseInt(sdf.format(now.getTime()));;
+    private Integer today = Integer.parseInt(sdf.format(now.getTime()));
+
 
     protected void onCreate(Bundle savedInstanceState) {
         new Fluid.HttpAsyncTaskGET().execute("http://139.59.158.39:8080/fluid");
@@ -82,24 +83,13 @@ public class Fluid extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fluid);
 
-        // AUSGABE: LOADING DATA ...  PLEASE WAIT
-
         for (int i=0; i<31; i++) {
             monthXAxis[i] = new String(Integer.toString(i+1));
         }
 
-
         graph = (GraphView) findViewById(R.id.graph);
         GridLabelRenderer glr = graph.getGridLabelRenderer();
         glr.setPadding(50);
-
-        //changeToMonthView();
-
-        /*
-        StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
-        staticLabelsFormatter.setHorizontalLabels(new String[]{"Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"});
-        graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
-        */
 
         loadingText = (TextView) findViewById(loadText);
 
@@ -124,23 +114,6 @@ public class Fluid extends AppCompatActivity{
             }
         });
 
-        //waterText.setText(Integer.toString(0) + " " + getString(R.string.waterText));
-
-/*
-        weekButton = (Button) findViewById(weekFluid);
-        weekButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                changeToWeekView();
-            }
-        });
-
-        monthButton = (Button) findViewById(monthFluid);
-        monthButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                changeToMonthView();
-            }
-        });
-*/
     }
 
 
@@ -194,7 +167,6 @@ public class Fluid extends AppCompatActivity{
         StaticLabelsFormatter staticLabelsFormatterMonth = new StaticLabelsFormatter(graph);
         staticLabelsFormatterMonth.setHorizontalLabels(monthXAxis);
         graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatterMonth);
-
     }
 
     public void changeToWeekView(){
@@ -206,14 +178,13 @@ public class Fluid extends AppCompatActivity{
         if (today < 7) {
             today = 7;
         }
-
-        Log.d(TAG, "today:" + today.toString());
+        //Log.d(TAG, "today:" + today.toString());
 
         String[] labelX = new String[7];
         Integer dataPointIdx=6;
         for (Integer i=today-1; i>=today-7; i--) {
             datapoints[dataPointIdx] = new DataPoint(dataPointIdx, dayAmountArray[i]);
-            Log.d(TAG, "dataPointIdx:" + dataPointIdx.toString() + " i: "+i.toString() + " amount:"+dayAmountArray[i]);
+            //Log.d(TAG, "dataPointIdx:" + dataPointIdx.toString() + " i: "+i.toString() + " amount:"+dayAmountArray[i]);
             labelX[dataPointIdx] = Integer.toString((i+1));
 
             dataPointIdx--;
@@ -222,11 +193,8 @@ public class Fluid extends AppCompatActivity{
         graph.addSeries(seriesWeek);
 
         StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
-        //staticLabelsFormatter.setHorizontalLabels(new String[]{"Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"});
         staticLabelsFormatter.setHorizontalLabels(labelX);
         graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
-
-
     }
 
     public void onBackPressed(){
@@ -243,8 +211,7 @@ public class Fluid extends AppCompatActivity{
         }
     }
 
-
-    ///test serverstuff
+    //////////SERVERKOMMUNIKATION////////////
 
     public boolean isConnected() {
         connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
@@ -277,11 +244,14 @@ public class Fluid extends AppCompatActivity{
             String server_response = null;
             server_response = EntityUtils.toString(response.getEntity());
             jsonObject = new JSONObject(server_response);
+
+            /*
             if (jsonObject.length() >0 ) {
                 Log.d(TAG, jsonObject.toString());
             } else {
                 Log.d(TAG, "Length 0");
             }
+            */
 
             JSONArray jsonArray = jsonObject.getJSONArray("fluid");
             if (jsonArray.length() > 0)
@@ -294,8 +264,7 @@ public class Fluid extends AppCompatActivity{
                 JSONObject fluidObject;
                 String[] parts;
 
-                //dataPoints = new DataPoint[31];
-                Log.d(TAG, jsonArray.toString());
+                //Log.d(TAG, jsonArray.toString());
 
                 for (int i=0; i<dayAmountArray.length; i++) {
                     dayAmountArray[i] = 0;
@@ -313,10 +282,7 @@ public class Fluid extends AppCompatActivity{
                     //Log.d(TAG, "year: "+year.toString() + " month: "+month.toString() + " day: "+day.toString());
                     amount = fluidObject.getInt("amount");
                     //Log.d(TAG, amount.toString());
-
-                    // daten einfüllen
                     dayAmountArray[day-1] = amount;
-
                 }
 
                 /* DEBUG
@@ -337,23 +303,16 @@ public class Fluid extends AppCompatActivity{
 
     private class HttpAsyncTaskGET extends AsyncTask<String, Void, ArrayList<Integer>> {
         @Override
-        //protected ArrayList<Integer> doInBackground(String... urls) {
         protected ArrayList<Integer> doInBackground(String... urls) {
             Log.d(TAG, "doIn Background: connected" + isConnected());
 
-
             waterMonth = GET_Month(urls[0]);
-            //
-            //waterWeek = GET_Week(urls[0]);
 
-
-            //Log.d(TAG, listFluid.toString());
             return listFluid;
         }
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(ArrayList<Integer> result) {
-            //Toast.makeText(getBaseContext(), "Data Sent!", Toast.LENGTH_LONG).show();
 
             weekButton = (Button) findViewById(weekFluid);
             weekButton.setOnClickListener(new View.OnClickListener(){
@@ -370,7 +329,6 @@ public class Fluid extends AppCompatActivity{
             });
 
             loadingText.setVisibility(View.GONE);
-
 
             changeToMonthView();
         }
