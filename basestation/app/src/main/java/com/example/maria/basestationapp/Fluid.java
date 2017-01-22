@@ -330,7 +330,11 @@ public class Fluid extends AppCompatActivity{
                     result.add(goal);
 
                 }*/
+                String dates = jsonObject.getString("fluid");
 
+                Log.d(TAG, dates);
+
+                /* TESTDATEN --> HIER ECHTE DATEN EINLESEN! */
                 for (int i=0; i<31;i++) {
                     tempData[i] = i*100;
                 }
@@ -384,7 +388,8 @@ public class Fluid extends AppCompatActivity{
                 }*/
 
 
-                //tempData[0] = Sonntagsdaten;
+                /* TESTDATEN --> HIER ECHTE DATEN EINLESEN! */
+
                 tempData[0] = 900;
                 tempData[1] = 99;
                 tempData[2] = 199;
