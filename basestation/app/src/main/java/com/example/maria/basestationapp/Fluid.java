@@ -29,6 +29,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -50,14 +51,7 @@ public class Fluid extends AppCompatActivity{
     private FloatingActionButton addWaterToDay;
 
     public int waterAmount = 0;
-    public int dayWaterAmount = 0;
-
-    private int[] waterWeek = new int[7];
-    private int[] waterMonth = new int[31];
-
-    //private ArrayList<Integer> waterWeek = new ArrayList<Integer>();
-    //private ArrayList<Integer> waterMonth = new ArrayList<Integer>();
-
+    ArrayList<Integer> waterMonth;
 
     LineGraphSeries<DataPoint> seriesWeek;
     LineGraphSeries<DataPoint> seriesMonth;
@@ -70,8 +64,12 @@ public class Fluid extends AppCompatActivity{
 
     private static ConnectivityManager connMgr;
     private static NetworkInfo networkInfo;
-    private static ArrayList<Fluid> listFluid = new ArrayList<Fluid>();
+    private static ArrayList<Integer> listFluid = new ArrayList<Integer>();
 
+    private static Integer[] dayAmountArray = new Integer[31];
+
+    SimpleDateFormat sdf = new SimpleDateFormat("dd");
+    private Integer today = Integer.parseInt(sdf.format(now.getTime()));;
 
     protected void onCreate(Bundle savedInstanceState) {
         new Fluid.HttpAsyncTaskGET().execute("http://139.59.158.39:8080/fluid");
@@ -83,25 +81,18 @@ public class Fluid extends AppCompatActivity{
             monthXAxis[i] = new String(Integer.toString(i+1));
         }
 
+
         graph = (GraphView) findViewById(R.id.graph);
         GridLabelRenderer glr = graph.getGridLabelRenderer();
         glr.setPadding(50);
 
-        seriesWeek = new LineGraphSeries<>(new DataPoint[] {
-                new DataPoint(0, waterWeek[0]),
-                new DataPoint(1, waterWeek[1]),
-                new DataPoint(2, waterWeek[2]),
-                new DataPoint(3, waterWeek[3]),
-                new DataPoint(4, waterWeek[4]),
-                new DataPoint(5, waterWeek[5]),
-                new DataPoint(6, waterWeek[6])
-        });
+        changeToMonthView();
 
-        graph.addSeries(seriesWeek);
-
+        /*
         StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
         staticLabelsFormatter.setHorizontalLabels(new String[]{"Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"});
         graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+        */
 
         backButton = (Button) findViewById(R.id.backButtonSteps);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -176,20 +167,9 @@ public class Fluid extends AppCompatActivity{
         DataPoint[] datapoints = new DataPoint[31];
 
         graph.removeAllSeries();
-/*
-        seriesMonth = new LineGraphSeries<>(new DataPoint[] {
 
-                new DataPoint(0, waterWeek[0]),
-                new DataPoint(1, waterWeek[1]),
-                new DataPoint(2, waterWeek[2]),
-                new DataPoint(3, waterWeek[3]),
-                new DataPoint(4, waterWeek[4]),
-                new DataPoint(5, waterWeek[5]),
-                new DataPoint(6, waterWeek[6])
-        });
-*/
         for (int i=0; i<31; i++) {
-            datapoints[i] = new DataPoint(i, waterMonth[i]);
+            datapoints[i] = new DataPoint(i, dayAmountArray[i]);
         }
         seriesMonth = new LineGraphSeries<>(datapoints);
         graph.addSeries(seriesMonth);
@@ -201,52 +181,34 @@ public class Fluid extends AppCompatActivity{
     }
 
     public void changeToWeekView(){
+
+        DataPoint[] datapoints = new DataPoint[7];
         graph.removeAllSeries();
 
-        seriesWeek = new LineGraphSeries<>(new DataPoint[] {
-                new DataPoint(0, waterWeek[0]),
-                new DataPoint(1, waterWeek[1]),
-                new DataPoint(2, waterWeek[2]),
-                new DataPoint(3, waterWeek[3]),
-                new DataPoint(4, waterWeek[4]),
-                new DataPoint(5, waterWeek[5]),
-                new DataPoint(6, waterWeek[6])
-        });
+        if (today < 7) {
+            today = 7;
+        }
 
+        Log.d(TAG, "today:" + today.toString());
+
+        String[] labelX = new String[7];
+        Integer dataPointIdx=6;
+        for (Integer i=today-1; i>=today-7; i--) {
+            datapoints[dataPointIdx] = new DataPoint(dataPointIdx, dayAmountArray[i]);
+            Log.d(TAG, "dataPointIdx:" + dataPointIdx.toString() + " i: "+i.toString() + " amount:"+dayAmountArray[i]);
+            labelX[dataPointIdx] = Integer.toString((i+1));
+
+            dataPointIdx--;
+        }
+        seriesWeek = new LineGraphSeries<>(datapoints);
         graph.addSeries(seriesWeek);
 
         StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
-        staticLabelsFormatter.setHorizontalLabels(new String[]{"Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"});
+        //staticLabelsFormatter.setHorizontalLabels(new String[]{"Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"});
+        staticLabelsFormatter.setHorizontalLabels(labelX);
         graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
 
-    }
 
-    public void checkDayOfWeek(){
-        switch(now.get(Calendar.DAY_OF_WEEK)){
-            case(Calendar.MONDAY):
-                waterWeek[0] += waterAmount;
-                break;
-            case(Calendar.TUESDAY):
-                waterWeek[1] += waterAmount;
-                break;
-            case(Calendar.WEDNESDAY):
-                waterWeek[2] += waterAmount;
-                break;
-            case(Calendar.THURSDAY):
-                waterWeek[3] += waterAmount;
-                break;
-            case(Calendar.FRIDAY):
-                waterWeek[4] += waterAmount;
-                break;
-            case(Calendar.SATURDAY):
-                waterWeek[5] += waterAmount;
-                break;
-            case(Calendar.SUNDAY):
-                waterWeek[6] += waterAmount;
-                break;
-            default:
-                break;
-        }
     }
 
     public void onBackPressed(){
@@ -254,26 +216,9 @@ public class Fluid extends AppCompatActivity{
         this.finish();
     }
 
-    public void onMonthPressed(){
-        changeToMonthView();
-    }
-
-    public void onWeekPressed(){
-        changeToWeekView();
-    }
-
     public void onAddWaterPressed(){
-        //dayWaterAmount += waterAmount;
-        checkDayOfWeek();
-        seriesWeek.resetData(new DataPoint[] {
-                new DataPoint(0, waterWeek[0]),
-                new DataPoint(1, waterWeek[1]),
-                new DataPoint(2, waterWeek[2]),
-                new DataPoint(3, waterWeek[3]),
-                new DataPoint(4, waterWeek[4]),
-                new DataPoint(5, waterWeek[5]),
-                new DataPoint(6, waterWeek[6])
-        });
+        dayAmountArray[today-1] += waterAmount;
+        changeToWeekView();
     }
 
 
@@ -292,16 +237,14 @@ public class Fluid extends AppCompatActivity{
         }
     }
 
-    public static int[] GET_Month(String url) {
+    public static ArrayList<Integer> GET_Month(String url) {
         Log.d(TAG, "GET Method started: connected" + networkInfo.toString());
 
         HttpClient httpclient = new DefaultHttpClient();
         HttpGet httpget = new HttpGet(url + "?companion=5&period=month");
-        //JSONArray jsonArray = new JSONArray();
-        JSONArray jsonArray = null;
+
         JSONObject jsonObject = new JSONObject();
-        //ArrayList<Fluid> result = new ArrayList<Fluid>();
-        int[] tempData = new int[31];
+        ArrayList<Integer> result = new ArrayList<Integer>();
 
         try {
             Log.d(TAG, "before execute:"+jsonObject.length());
@@ -312,110 +255,73 @@ public class Fluid extends AppCompatActivity{
             String server_response = null;
             server_response = EntityUtils.toString(response.getEntity());
             jsonObject = new JSONObject(server_response);
-
-            if (jsonObject.length() > 0) {
+            if (jsonObject.length() >0 ) {
                 Log.d(TAG, jsonObject.toString());
-                /*
-                String emoji = "";
-                String emojimap = "";
-                String text = "";
-                Goal goal;
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    jsonObject = jsonArray.getJSONObject(i);
-                    emoji = jsonObject.getString("emoji");
-                    text = jsonObject.getString("text");
-                    emojimap = EmojiMap.replaceCheatSheetEmojis(emoji);
-                    goal = new Goal(emojimap, text);
-                    Log.d(TAG, goal.toString());
-                    result.add(goal);
+            } else {
+                Log.d(TAG, "Length 0");
+            }
 
-                }*/
-                String dates = jsonObject.getString("fluid");
+            JSONArray jsonArray = jsonObject.getJSONArray("fluid");
+            if (jsonArray.length() > 0)
+            {
+                Integer amount;
+                String date="";
+                Integer day;
+                Integer month;
+                Integer year;
+                JSONObject fluidObject;
+                String[] parts;
 
-                Log.d(TAG, dates);
+                //dataPoints = new DataPoint[31];
+                Log.d(TAG, jsonArray.toString());
 
-                /* TESTDATEN --> HIER ECHTE DATEN EINLESEN! */
-                for (int i=0; i<31;i++) {
-                    tempData[i] = i*100;
+                for (int i=0; i<dayAmountArray.length; i++) {
+                    dayAmountArray[i] = 0;
                 }
+
+                for (int i =0; i < jsonArray.length(); i++) {
+                    fluidObject = jsonArray.getJSONObject(i);
+                    //Log.d(TAG, fluidObject.toString());
+                    date = fluidObject.getString("date");
+                    //Log.d(TAG, date);
+                    parts = date.split("-");
+                    year = Integer.parseInt(parts[0]);
+                    month = Integer.parseInt(parts[1]);
+                    day = Integer.parseInt(parts[2]);
+                    //Log.d(TAG, "year: "+year.toString() + " month: "+month.toString() + " day: "+day.toString());
+                    amount = fluidObject.getInt("amount");
+                    //Log.d(TAG, amount.toString());
+
+                    // daten einfüllen
+                    dayAmountArray[day-1] = amount;
+
+                }
+
+                /* DEBUG
+                Log.d(TAG, "Array fertig: ");
+                for (int i=0;i<dayAmountArray.length;i++) {
+                    Log.d(TAG, "day: "+(i+1)+" amount: "+dayAmountArray[i].toString());
+                }
+                */
             }
         } catch (IOException e) {
             Log.e(TAG,"IOException GET"+ e.toString());
         } catch (JSONException e) {
             Log.e(TAG, "JSON Exception " + e.getMessage());
         }
-        Log.d(TAG, "Server response..." + tempData);
-        return tempData;
+        Log.d(TAG, "Server response..." + result);
+        return result;
     }
 
-    public static int[] GET_Week(String url) {
-        Log.d(TAG, "GET_WeeK()");
-        Log.d(TAG, "GET Method started: connected" + networkInfo.toString());
-
-        HttpClient httpclient = new DefaultHttpClient();
-        HttpGet httpget = new HttpGet(url + "?companion=5&period=week");
-        JSONArray jsonArray = null;
-        JSONObject jsonObject = new JSONObject();
-        //ArrayList<Fluid> result = new ArrayList<Fluid>();
-        int[] tempData = new int[7];
-
-        try {
-            Log.d(TAG, "before execute:"+jsonObject.length());
-            System.setProperty("http.keepAlive", "false");
-            HttpResponse response = httpclient.execute(httpget);
-
-            Log.d(TAG, "after execute"+jsonObject.length());
-            String server_response = null;
-            server_response = EntityUtils.toString(response.getEntity());
-            jsonObject = new JSONObject(server_response);
-
-            if (jsonObject.length() > 0) {
-                Log.d(TAG, jsonObject.toString());
-                /*
-                String emoji = "";
-                String emojimap = "";
-                String text = "";
-                Goal goal;
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    jsonObject = jsonArray.getJSONObject(i);
-                    emoji = jsonObject.getString("emoji");
-                    text = jsonObject.getString("text");
-                    emojimap = EmojiMap.replaceCheatSheetEmojis(emoji);
-                    goal = new Goal(emojimap, text);
-                    Log.d(TAG, goal.toString());
-                    result.add(goal);
-
-                }*/
-
-
-                /* TESTDATEN --> HIER ECHTE DATEN EINLESEN! */
-
-                tempData[0] = 900;
-                tempData[1] = 99;
-                tempData[2] = 199;
-                tempData[3] = 299;
-                tempData[4] = 399;
-                tempData[5] = 499;
-                tempData[6] = 799;
-            }
-        } catch (IOException e) {
-            Log.e(TAG,"IOException GET"+ e.toString());
-        } catch (JSONException e) {
-            Log.e(TAG, "JSON Exception " + e.getMessage());
-        }
-        Log.d(TAG, "Server response..." + tempData);
-        return tempData;
-    }
-
-    private class HttpAsyncTaskGET extends AsyncTask<String, Void, ArrayList<Fluid>> {
+    private class HttpAsyncTaskGET extends AsyncTask<String, Void, ArrayList<Integer>> {
         @Override
-        protected ArrayList<Fluid> doInBackground(String... urls) {
+        protected ArrayList<Integer> doInBackground(String... urls) {
             Log.d(TAG, "doIn Background: connected" + isConnected());
 
 
             waterMonth = GET_Month(urls[0]);
             //
-            waterWeek = GET_Week(urls[0]);
+            //waterWeek = GET_Week(urls[0]);
 
 
             //Log.d(TAG, listFluid.toString());
