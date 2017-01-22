@@ -33,6 +33,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import static com.example.maria.basestationapp.R.id.addWaterText;
+import static com.example.maria.basestationapp.R.id.loadText;
 import static com.example.maria.basestationapp.R.id.monthFluid;
 import static com.example.maria.basestationapp.R.id.weekFluid;
 
@@ -46,12 +48,15 @@ public class Fluid extends AppCompatActivity{
     private Button backButton;
     private Button weekButton;
     private Button monthButton;
-
+    public TextView waterText;
+    public TextView loadingText;
     private SeekBar waterAmountSlider;
     private FloatingActionButton addWaterToDay;
 
     public int waterAmount = 0;
     ArrayList<Integer> waterMonth;
+
+    public boolean inWeekView;
 
     LineGraphSeries<DataPoint> seriesWeek;
     LineGraphSeries<DataPoint> seriesMonth;
@@ -77,6 +82,8 @@ public class Fluid extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fluid);
 
+        // AUSGABE: LOADING DATA ...  PLEASE WAIT
+
         for (int i=0; i<31; i++) {
             monthXAxis[i] = new String(Integer.toString(i+1));
         }
@@ -86,13 +93,18 @@ public class Fluid extends AppCompatActivity{
         GridLabelRenderer glr = graph.getGridLabelRenderer();
         glr.setPadding(50);
 
-        changeToMonthView();
+        //changeToMonthView();
 
         /*
         StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
         staticLabelsFormatter.setHorizontalLabels(new String[]{"Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"});
         graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
         */
+
+        loadingText = (TextView) findViewById(loadText);
+
+        waterText = (TextView) findViewById(addWaterText);
+        waterText.setText(Integer.toString(0) + " " + getString(R.string.waterText));
 
         backButton = (Button) findViewById(R.id.backButtonSteps);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -112,6 +124,9 @@ public class Fluid extends AppCompatActivity{
             }
         });
 
+        //waterText.setText(Integer.toString(0) + " " + getString(R.string.waterText));
+
+/*
         weekButton = (Button) findViewById(weekFluid);
         weekButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
@@ -125,8 +140,9 @@ public class Fluid extends AppCompatActivity{
                 changeToMonthView();
             }
         });
-
+*/
     }
+
 
     private class waterListener implements SeekBar.OnSeekBarChangeListener {
         @Override
@@ -158,12 +174,13 @@ public class Fluid extends AppCompatActivity{
                     break;
             }
 
-            final TextView waterText = (TextView) findViewById(R.id.addWaterText);
             waterText.setText(Integer.toString(waterAmount) + " " + getString(R.string.waterText));
         }
     }
 
     public void changeToMonthView(){
+        inWeekView = false;
+
         DataPoint[] datapoints = new DataPoint[31];
 
         graph.removeAllSeries();
@@ -181,6 +198,7 @@ public class Fluid extends AppCompatActivity{
     }
 
     public void changeToWeekView(){
+        inWeekView = true;
 
         DataPoint[] datapoints = new DataPoint[7];
         graph.removeAllSeries();
@@ -218,7 +236,11 @@ public class Fluid extends AppCompatActivity{
 
     public void onAddWaterPressed(){
         dayAmountArray[today-1] += waterAmount;
-        changeToWeekView();
+        if(inWeekView){
+            changeToWeekView();
+        } else {
+            changeToMonthView();
+        }
     }
 
 
@@ -315,6 +337,7 @@ public class Fluid extends AppCompatActivity{
 
     private class HttpAsyncTaskGET extends AsyncTask<String, Void, ArrayList<Integer>> {
         @Override
+        //protected ArrayList<Integer> doInBackground(String... urls) {
         protected ArrayList<Integer> doInBackground(String... urls) {
             Log.d(TAG, "doIn Background: connected" + isConnected());
 
@@ -327,11 +350,30 @@ public class Fluid extends AppCompatActivity{
             //Log.d(TAG, listFluid.toString());
             return listFluid;
         }
-       /* // onPostExecute displays the results of the AsyncTask.
+        // onPostExecute displays the results of the AsyncTask.
         @Override
-        protected void onPostExecute(String result) {
-            Toast.makeText(getBaseContext(), "Data Sent!", Toast.LENGTH_LONG).show();
-        }*/
+        protected void onPostExecute(ArrayList<Integer> result) {
+            //Toast.makeText(getBaseContext(), "Data Sent!", Toast.LENGTH_LONG).show();
+
+            weekButton = (Button) findViewById(weekFluid);
+            weekButton.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View v){
+                    changeToWeekView();
+                }
+            });
+
+            monthButton = (Button) findViewById(monthFluid);
+            monthButton.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View v){
+                    changeToMonthView();
+                }
+            });
+
+            loadingText.setVisibility(View.GONE);
+
+
+            changeToMonthView();
+        }
     }
 }
 

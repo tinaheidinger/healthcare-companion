@@ -12,4 +12,5 @@
     <string name="buttonMonth">Monat</string>
     <string name="waterText">ml hinzufügen</string>
     <string name="errorWeek">Not a valid Weekday</string>
+    <string name="loadText">Loading...</string>
 </resources>
