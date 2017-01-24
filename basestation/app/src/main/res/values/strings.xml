@@ -7,4 +7,10 @@
     <string name="activity_daily_goals1">Sport</string>
     <string name="title_activity_http_handler">HttpHandlerActivity</string>
     <string name="title_activity_list_reminders">ListReminders</string>
+
+    <string name="buttonWeek">Woche</string>
+    <string name="buttonMonth">Monat</string>
+    <string name="waterText">ml hinzufügen</string>
+    <string name="errorWeek">Not a valid Weekday</string>
+    <string name="loadText">Loading...</string>
 </resources>

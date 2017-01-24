@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/backButtonSteps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_marginLeft="50dp"
+        android:background="@drawable/buttons"
+        android:text="Menü" />
+
+    <Button
+        android:text="@string/buttonWeek"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/weekFluid"
+        android:layout_marginEnd="32dp"
+        android:layout_alignBaseline="@+id/monthFluid"
+        android:layout_alignBottom="@+id/monthFluid"
+        android:layout_toStartOf="@+id/addFluid" />
+
+    <com.jjoe64.graphview.GraphView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:id="@+id/graph"
+        android:layout_marginBottom="12dp"
+        android:layout_above="@+id/weekFluid"
+        android:layout_alignStart="@+id/backButtonSteps"
+        android:layout_alignEnd="@+id/button" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:fabSize="normal"
+        app:srcCompat="@android:drawable/ic_input_add"
+        android:id="@+id/addFluid"
+        app:backgroundTint="?attr/actionMenuTextColor"
+        android:layout_marginEnd="186dp"
+        android:layout_below="@+id/weekFluid"
+        android:layout_alignParentEnd="true" />
+
+    <SeekBar
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:max="5"
+        android:progress="0"
+        android:id="@+id/waterSlider"
+        android:layout_alignBottom="@+id/addFluid"
+        android:layout_alignStart="@+id/monthFluid"
+        android:layout_alignEnd="@+id/weekFluid" />
+
+    <TextView
+        android:text="@string/waterText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/addFluid"
+        android:layout_toEndOf="@+id/waterSlider"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
+        android:id="@+id/addWaterText" />
+
+    <Button
+        android:text="Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button"
+        android:visibility="invisible"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="64dp" />
+
+    <Button
+        android:text="@string/buttonMonth"
+        android:id="@+id/monthFluid"
+        android:visibility="visible"
+        android:layout_height="wrap_content"
+        android:layout_width="130dp"
+        android:layout_marginBottom="135dp"
+        android:layout_marginStart="82dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/backButtonSteps" />
+
+    <TextView
+        android:text="@string/loadText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/loadText" />
+
+</RelativeLayout>

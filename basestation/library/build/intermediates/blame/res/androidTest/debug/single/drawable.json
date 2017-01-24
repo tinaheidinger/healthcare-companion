@@ -1,10 +1,10 @@
 [
     {
-        "merged": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/res/merged/androidTest/debug/drawable/button_previous_month_selector.xml",
-        "source": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/bundles/debug/res/drawable/button_previous_month_selector.xml"
+        "merged": "E:\\Dokumente\\@Uni\\TU\\Sem4\\ProRe1u2\\companion-projekt\\basestation\\library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\button_previous_month_selector.xml",
+        "source": "E:\\Dokumente\\@Uni\\TU\\Sem4\\ProRe1u2\\companion-projekt\\basestation\\library\\build\\intermediates\\bundles\\debug\\res\\drawable\\button_previous_month_selector.xml"
     },
     {
-        "merged": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/res/merged/androidTest/debug/drawable/button_next_month_selector.xml",
-        "source": "/Users/maria/Dropbox/ProRe/healthcare-companion/basestation/library/build/intermediates/bundles/debug/res/drawable/button_next_month_selector.xml"
+        "merged": "E:\\Dokumente\\@Uni\\TU\\Sem4\\ProRe1u2\\companion-projekt\\basestation\\library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\button_next_month_selector.xml",
+        "source": "E:\\Dokumente\\@Uni\\TU\\Sem4\\ProRe1u2\\companion-projekt\\basestation\\library\\build\\intermediates\\bundles\\debug\\res\\drawable\\button_next_month_selector.xml"
     }
 ]
