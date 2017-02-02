@@ -22,13 +22,18 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -74,7 +79,31 @@ public class Fluid extends AppCompatActivity{
     private static Integer[] dayAmountArray = new Integer[31];
 
     SimpleDateFormat sdf = new SimpleDateFormat("dd");
-    private Integer today = Integer.parseInt(sdf.format(now.getTime()));
+    //public Integer today
+
+    SimpleDateFormat dateToday = new SimpleDateFormat("yyyy-MM-dd");
+    //public String strToday = dateToday.format(now.getTime());
+    private static String stringToday;
+    private static int today;
+
+    private static void setToday(int newValue) {
+        today = newValue;
+    }
+
+    private static int getToday () {
+        return today;
+    }
+
+    Integer[] dateToPost = new Integer[3];
+
+    private static void setStringToday(String newStringToday) {
+        stringToday = newStringToday;
+    }
+
+    private static String getStrToday () {
+        return stringToday;
+    }
+
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +143,12 @@ public class Fluid extends AppCompatActivity{
             }
         });
 
+        dateToPost[0] = now.YEAR;
+        dateToPost[1] = now.MONTH;
+        dateToPost[2] = now.DAY_OF_MONTH;
+
+        setStringToday(dateToday.format(now.getTime()));
+        setToday(Integer.parseInt(sdf.format(now.getTime())));
     }
 
 
@@ -204,6 +239,13 @@ public class Fluid extends AppCompatActivity{
 
     public void onAddWaterPressed(){
         dayAmountArray[today-1] += waterAmount;
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////   !!!! HIER BITTE DIE RICHTIGE URL HINEINSCHREIBEN !!!! /////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+        new Fluid.HttpAsyncTaskPOST().execute("http://139.59.158.39:8080/fluidtest");
+
         if(inWeekView){
             changeToWeekView();
         } else {
@@ -224,6 +266,76 @@ public class Fluid extends AppCompatActivity{
         } else {
             return false;
         }
+    }
+
+    public static String POST(String url){
+        Log.d(TAG,"Post Method started");
+
+        InputStream inputStream = null;
+        String result = "";
+
+        try {
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpPost httpPost = new HttpPost(url);
+
+            String json = "";
+
+            JSONObject mainObject = new JSONObject();
+            JSONObject jsonObjectToArray = new JSONObject();
+            JSONArray jsonArray = new JSONArray();
+
+            jsonObjectToArray.accumulate("amount", dayAmountArray[getToday()-1]);
+            jsonObjectToArray.accumulate("date", getStrToday());
+
+            jsonArray.put(jsonObjectToArray);
+
+            mainObject.put("fluid", jsonArray);
+            mainObject.put("companion", 5);
+
+            json = mainObject.toString();
+
+            StringEntity se = new StringEntity(json);
+
+            httpPost.setEntity(se);
+            httpPost.setHeader("Content-type", "application/json");
+
+            Log.d(TAG,"preparing HttpPost with following content..");
+            Log.d(TAG,json);
+
+            HttpResponse httpResponse = httpclient.execute(httpPost);
+            Log.d(TAG,"HttpPost ok");
+
+            inputStream = httpResponse.getEntity().getContent();
+
+            if(inputStream != null) {
+                result = convertInputStreamToString(inputStream);
+                Log.d(TAG, "answer of server... \n"+result);
+            }
+            else {
+                result = "Did not work!";
+            }
+        } catch (JSONException e) {
+            Log.d(TAG,"JSON Exception");
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    private static String convertInputStreamToString(InputStream inputStream) throws IOException{
+        Log.d(TAG,"prepare bufferedreader");
+        BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(inputStream));
+        Log.d(TAG,"BR ok");
+
+        String line = "";
+        String result = "";
+        while((line = bufferedReader.readLine()) != null)
+            result += line;
+
+        inputStream.close();
+        return result;
+
     }
 
     public static ArrayList<Integer> GET_Month(String url) {
@@ -331,6 +443,17 @@ public class Fluid extends AppCompatActivity{
             loadingText.setVisibility(View.GONE);
 
             changeToMonthView();
+        }
+
+
+
+
+    }
+    private class HttpAsyncTaskPOST extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... urls) {
+
+            return POST(urls[0]);
         }
     }
 }
