@@ -58,11 +58,11 @@ def get_goals():
     response.content_type = 'application/json'
     return json.dumps(goals)
 
-# changes the active status for a specified goal
+# edits a specified goal
 @expect_json
 @put('/goal/<id:int>')
-def set_active(id):
-    table_goals.update(dict(id=id, active=request.json['active']), ['id'])
+def edit_goal(id):
+    table_goals.update(dict(id=id, text=request.json['text'], emoji=request.json['emoji']), ['id'])
     goal = table_goals.find_one(id=id)
     response_status = 200
     response.content_type = 'application/json'
@@ -102,6 +102,26 @@ def get_reminders():
     response.content_type = 'application/json'
     return json.dumps(reminders)
 
+# edits a specified reminder
+@expect_json
+@put('/reminder/<id:int>')
+def edit_reminder(id):
+    reminder = dict()
+    print(request.json)
+    reminder['companion'] = request.json['companion']
+    reminder['emoji'] = request.json['emoji']
+    reminder['text'] = request.json['text']
+    if 'date' in request.json:
+        reminder['date'] = request.json['date']
+    if 'weekday' in request.json:
+        reminder['weekday'] = request.json['weekday']
+    reminder['id'] = id
+    table_reminders.update(reminder, ['id'])
+    reminder_from_db = table_reminders.find_one(id=id)
+    response_status = 200
+    response.content_type = 'application/json'
+    return json.dumps(reminder_from_db)
+
 # deletes a reminder
 @delete('/reminder/<id:int>')
 def delete_reminder(id):
@@ -114,7 +134,10 @@ def delete_reminder(id):
 def get_fluid():
     companion = request.query.companion
     period = request.query.period
-    fluid_data = {'2017-01-18': 450, '2017-01-17': 200, '2017-01-16': 950}
+    fluid_data = []
+    fluid_data.append(dict(date='2017-01-18', amount=450))
+    fluid_data.append(dict(date='2017-01-17', amount=200))
+    fluid_data.append(dict(date='2017-01-16', amount=950))
     fluid = dict(companion=companion, period=period, fluid=fluid_data)
     response.status = 200
     response.content_type = 'application/json'
@@ -125,7 +148,10 @@ def get_fluid():
 def get_steps():
     companion = request.query.companion
     period = request.query.period
-    steps_data = {'2017-01-18': 9440, '2017-01-17': 8031, '2017-01-16': 11741}
+    steps_data = []
+    steps_data.append(dict(date='2017-01-18', amount=9440))
+    steps_data.append(dict(date='2017-01-17', amount=8031))
+    steps_data.append(dict(date='2017-01-16', amount=11741))
     steps = dict(companion=companion, period=period, steps=steps_data)
     response.status = 200
     response.content_type = 'application/json'
