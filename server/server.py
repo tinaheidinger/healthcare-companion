@@ -9,6 +9,8 @@ import datetime
 db = dataset.connect('sqlite:///' + os.path.dirname(os.path.abspath(__file__)) + '/database.db')
 table_goals = db['goals']
 table_reminders = db['reminders']
+table_fluid = db['fluid']
+table_steps = db['steps']
 
 # use @expect_json decorator if request content type must be
 # 'application/json' and body must not be empty. executes function
@@ -143,6 +145,16 @@ def get_fluid():
     response.content_type = 'application/json'
     return json.dumps(fluid)
 
+# adds fluid
+@expect_json
+@post('/fluid')
+def add_fluid():
+    fluid_id = table_fluid.insert(dict(companion=request.json['companion'], date=request.json['date'], amount=request.json['amount']))
+    fluid_from_db = table_fluid.find_one(id=fluid_id)
+    response.status = 200
+    response.content_type = 'application/json'
+    return json.dumps(fluid_from_db)
+
 # returns steps statistics
 @get('/steps')
 def get_steps():
@@ -156,6 +168,7 @@ def get_steps():
     response.status = 200
     response.content_type = 'application/json'
     return json.dumps(steps)
+
 
 
 run(host='0.0.0.0', port=8080, debug=False, reloader=True)
